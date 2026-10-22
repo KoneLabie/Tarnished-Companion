@@ -5,6 +5,7 @@ build/
 dist/
 *.spec
 settings.json
+eliminations.json
 run-state.json
 run-policy.json
 external-run.json

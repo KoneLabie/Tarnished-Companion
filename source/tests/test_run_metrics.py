@@ -57,6 +57,44 @@ class CombatMetricsTests(unittest.TestCase):
         self.sample(650, 3)
         self.assertEqual(self.metrics.snapshot(3)['observedDamage'], 250)
 
+    def test_short_fight_result_stays_frozen_after_target_disappears(self):
+        self.sample(1000, 0)
+        self.sample(700, .5)
+        self.metrics.update('character:j1', [], True, 1)
+        state = self.metrics.snapshot(30)
+        self.assertEqual(state['status'], 'last-target')
+        self.assertEqual(state['observedDamage'], 300)
+        self.assertEqual(state['observedSeconds'], .5)
+        self.assertEqual(state['averageDps'], 600)
+        self.metrics.update('character:j1', [], True, 31)
+        self.assertEqual(self.metrics.snapshot(31), state)
+
+    def test_returning_target_starts_new_observation_without_bridging_hidden_damage(self):
+        self.sample(1000, 0)
+        self.sample(700, .5)
+        self.metrics.update('character:j1', [], True, 1)
+        self.sample(100, 3.5)
+        self.assertEqual(self.metrics.snapshot(3.5)['observedDamage'], 0)
+        self.assertEqual(self.metrics.snapshot(3.5)['status'], 'tracking')
+
+    def test_brief_hud_flicker_keeps_the_same_target_observation(self):
+        self.sample(1000, 0)
+        self.sample(700, .5)
+        self.metrics.update('character:j1', [], True, 1)
+        self.sample(400, 1.5)
+        state = self.metrics.snapshot(1.5)
+        self.assertEqual(state['status'], 'tracking')
+        self.assertEqual(state['observedDamage'], 600)
+        self.assertEqual(state['observedSeconds'], 1.5)
+
+    def test_last_target_clears_on_character_change_or_reader_failure(self):
+        for context, available in [('character:j2', True), ('character:j1', False)]:
+            self.sample(1000, 0)
+            self.sample(700, .5)
+            self.metrics.update('character:j1', [], True, 1)
+            self.metrics.update(context, [], available, 2)
+            self.assertEqual(self.metrics.snapshot(2)['status'], 'waiting')
+
     def test_full_recovery_restarts_attempt(self):
         self.sample(800, 0)
         self.sample(700, 1)

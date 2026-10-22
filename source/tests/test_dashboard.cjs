@@ -180,11 +180,9 @@ async function main() {
   const second = clone(fixture);
   second.contextKey = 'char-b:journey-2'; second.stats.name = 'Second'; second.stats.journey = 2;
   second.route = [2]; second.enemyKills = 0;
-  run('killsDirty=true'); element('killsInput').value = 999;
   accept(second);
   assert.deepEqual(read('route'), [2]);
   assert.equal(run('routeDirty'), false);
-  assert.equal(element('killsInput').value, '0');
   assert.equal(element('widthChoice').value, '440');
   assert.match(element('char').textContent, /Journey 2/);
   run('revertLayout()');
@@ -319,3 +317,5 @@ async function main() {
   console.log('Dashboard checks passed: automatic encounter UI, DLC detection/filtering, preserved hidden drafts, report export, category autosave, context resets and action races.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
+
+assert.doesNotMatch(html, /killsInput|saveKillCount|changeKillCount|killsDirty/);

@@ -38,7 +38,7 @@ button:hover{background:#32271b;border-color:#aa8850}button:focus-visible{outlin
 .counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #332c21;border-radius:5px;background:#100e0dc9}
 .stat{text-align:center;padding:5px 2px}.stat+.stat{border-left:1px solid #332c21}
 .stat small,.metric small{display:block;color:#aa9b7d;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.stat b{display:block;color:#eee5d3;font:600 14px Segoe UI}.stat.deaths b{color:#ce7772}.stat.bosses b{color:#d3b76e}
+.stat b{display:block;color:#eee5d3;font:600 14px Segoe UI}.stat.deaths b{color:#ce7772}.stat.bosses b{color:#d3b76e}.stat.eliminations b.paused{color:#aa9b7d}
 .main{min-height:82px;padding:8px 0;border-top:1px solid #332c21;border-bottom:1px solid #332c21;display:grid;grid-template-columns:var(--boss-size,108px) minmax(0,1fr);align-items:start;gap:9px}
 .portrait-frame{position:relative;width:var(--boss-size,108px);height:var(--boss-size,108px);border:1px solid #df7364;border-radius:5px;background:#171411;box-shadow:inset 0 0 0 1px #4f201c,0 0 8px #bc302b55}
 .portrait-frame:before{content:'';position:absolute;inset:-2px;z-index:1;pointer-events:none;border:1px solid #f29b7b90;border-radius:6px;box-shadow:0 0 5px #e5524680,0 0 13px #b42b2850;opacity:.7}
@@ -88,21 +88,22 @@ button:hover{background:#32271b;border-color:#aa8850}button:focus-visible{outlin
   <button type="button" class="view-button" id="speedrunViewButton" onclick="switchView('speedrun')" title="Speedrun stats" aria-label="Show speedrun stats" aria-pressed="false"></button>
  </nav></div><div class="counts">
   <div class="stat bosses"><small>Bosses</small><b id="bosses">—</b></div>
-  <div class="stat"><small>Kills</small><b id="kills">—</b></div>
+  <div class="stat eliminations"><small>Eliminations</small><b id="eliminations">—</b></div>
   <div class="stat deaths"><small>Deaths</small><b id="deaths">—</b></div>
  </div></div>
  <div class="main" id="main"></div>
  <div class="attempt-slot" id="homeAttempt" hidden></div>
  <div class="lineup" id="lineup" aria-label="Upcoming bosses"></div>
  <section class="view-panel" id="combatPanel" aria-label="Combat statistics" hidden>
-  <div class="eyebrow">Combat statistics</div><h1 class="panel-heading" id="combatBoss">Waiting for a live fight</h1>
-  <div class="metrics-hero"><small>Estimated boss DPS · last 5s</small><strong><span id="rollingDps">—</span><span class="unit">HP/s</span></strong></div>
+  <div class="eyebrow">Combat statistics</div><h1 class="panel-heading" id="combatBoss">Waiting for a live target</h1>
+  <div class="metrics-hero"><small>Estimated target DPS · last 5s</small><strong><span id="rollingDps">—</span><span class="unit">HP/s</span></strong></div>
   <div class="metrics-grid">
    <div class="metrics-cell"><small>Average DPS</small><b id="averageDps">—</b></div><div class="metrics-cell"><small>Observed damage</small><b id="observedDamage">—</b></div>
    <div class="metrics-cell"><small>Largest HP drop</small><b id="largestDrop">—</b></div><div class="metrics-cell"><small>Observed time</small><b id="observedSeconds">—</b></div>
   </div><div class="panel-subtitle" id="combatHealth"></div>
   <div class="attempt-slot" id="combatAttempt" hidden></div>
-  <button type="button" class="info-button" aria-expanded="false" onclick="toggleInfo('combatInfo',this)">info</button><div class="info-panel" id="combatInfo" hidden><p>Estimated boss HP loss includes all sources. Sampled drops may contain several hits. Measurements restart after a gap or phase change.</p><p id="combatNote"></p><p>Combat view displays live information only. It does not record run times.</p></div>
+  <p id="combatNote" class="panel-subtitle" role="status"></p>
+  <button type="button" class="info-button" aria-expanded="false" onclick="toggleInfo('combatInfo',this)">info</button><div class="info-panel" id="combatInfo" hidden><p>Estimated target HP loss includes all sources. Only damage observed while a target health bar is visible is measured. Sampled drops may contain several hits. Measurements restart after a gap or phase change.</p><p>Combat view displays live information only. It does not record run times.</p></div>
  </section>
  <section class="view-panel" id="speedrunPanel" aria-label="Speedrun statistics" hidden>
   <div class="run-heading"><div><div class="eyebrow">Speedrun statistics</div><h1 class="panel-heading" id="runCharacter">New run</h1></div><span class="run-badge" id="runStatus">Ready</span></div>
@@ -120,7 +121,7 @@ button:hover{background:#32271b;border-color:#aa8850}button:focus-visible{outlin
   <button type="button" class="export-button" id="exportRunButton" onclick="exportSpeedrun()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5"/></svg>Export run · .tlrun</button>
  </section>
  <div class="action-message" id="actionMessage" role="status" hidden></div>
- <div class="context-line"><span id="journey"></span><button type="button" class="info-button context-info" aria-expanded="false" onclick="toggleInfo('overlayInfo',this)">info</button><span class="source-status" id="sourceStatus" role="status">Waiting for save</span></div><div class="info-panel" id="overlayInfo" hidden><p>Home and combat views show live information only. Choose the timer view to record a new-character run. Character statistics refresh after game saves.</p></div>
+ <div class="context-line"><span id="journey"></span><button type="button" class="info-button context-info" aria-expanded="false" onclick="toggleInfo('overlayInfo',this)">info</button><span class="source-status" id="sourceStatus" role="status">Waiting for save</span></div><div class="info-panel" id="overlayInfo" hidden><p>Home and combat views show live information only. Choose the timer view to record a new-character run. Character statistics refresh after game saves.</p><p id="eliminationInfo"></p></div>
 </div>
 <script>
 const TOKEN='__TOKEN__';
@@ -225,11 +226,11 @@ function renderBossAttempts(s,isConnected=true){
 }
 function renderCombatMetrics(s,isConnected=true){
  const m=s.combatMetrics||{},available=isConnected&&saveReady(s),known=available&&Number.isFinite(m.observedSeconds);
- document.getElementById('combatBoss').textContent=m.bossName||(s.current?.source==='Live game data'?s.current.name:'Waiting for a live fight');
+ document.getElementById('combatBoss').textContent=m.bossName?((m.status==='last-target'?'Last target · ':'')+m.bossName):(s.current?.source==='Live game data'?s.current.name:'Waiting for a live target');
  for(const key of ['rollingDps','averageDps','observedDamage','largestDrop'])document.getElementById(key).textContent=available?metricNumber(m[key]):'—';
  document.getElementById('observedSeconds').textContent=known?fightTime(m.observedSeconds):'—';
- document.getElementById('combatHealth').textContent=available&&Number.isFinite(m.hpPercent)?`Boss health remaining · ${Math.max(0,Math.min(100,m.hpPercent)).toFixed(1)}%`:'';
- const note=!isConnected?'Connection lost. Live measurements are unavailable.':!saveReady(s)?'Connect a valid character save to measure damage.':m.status==='tracking'?'':'Enable live tracking and enter a boss fight to measure damage. Manual fight previews do not supply DPS.';
+ document.getElementById('combatHealth').textContent=available&&Number.isFinite(m.hpPercent)?`Target health remaining · ${Math.max(0,Math.min(100,m.hpPercent)).toFixed(1)}%`:'';
+ const note=!isConnected?'Connection lost. Live measurements are unavailable.':!saveReady(s)?'Connect a valid character save to measure damage.':m.status==='tracking'?'':m.status==='last-target'?'Last observed measurements · target no longer visible. New measurements start with the next target.':s.liveEnabled===false?'Enable live tracking to measure damage.':s.liveStatus==='Connected — no active boss health bar.'?'Live tracking connected. Attack an enemy or enter a boss fight to measure damage.':s.liveStatus||'Waiting for live tracking. Attack an enemy or enter a boss fight to measure damage.';
  const noteElement=document.getElementById('combatNote');noteElement.textContent=note;noteElement.hidden=!note;
 }
 function recordCheckedLabel(value){
@@ -465,6 +466,13 @@ function renderFreshness(s,isConnected){
  const age=Number.isFinite(s.updated)?Math.max(0,Math.floor(Date.now()/1000-s.updated)):null;
  status.textContent=age===null?'Save connected':age<10?'Saved just now':age<60?`Saved ${age}s ago`:age<3600?`Saved ${Math.floor(age/60)}m ago`:`Saved ${Math.floor(age/3600)}h ago`;
 }
+function renderEliminations(s,isConnected=true){
+ const m=s.eliminations||{},value=document.getElementById('eliminations'),ready=saveReady(s),tracking=isConnected&&ready&&m.status==='tracking';
+ value.textContent=ready&&Number.isSafeInteger(m.total)&&m.total>=0?m.total.toLocaleString():'—';
+ const status=!isConnected?'Elimination tracking disconnected.':!ready?'Waiting for a valid character save.':m.status==='storage-error'?'Eliminations could not be saved; retrying automatically.':tracking?'Automatic elimination tracking connected.':s.eliminationReaderStatus||'Automatic elimination tracking paused.';
+ value.title=status;value.classList.toggle('paused',!tracking);
+ document.getElementById('eliminationInfo').textContent=status+' '+(m.note||'Counts regular hostile-enemy deaths observed while the companion is connected. Past kills are unavailable. Bosses, players and allies are excluded.');
+}
 function renderState(s){
   const st=s.stats,l={width:360,opacity:.72,font:'Cinzel',icons:8,...s.layout},card=document.querySelector('.card'),ready=saveReady(s);
   requestedNativeWidth=l.width;
@@ -474,7 +482,7 @@ function renderState(s){
   document.documentElement.style.setProperty('--overlay-font',l.font==='System'?'Segoe UI':l.font);
   const nm=document.getElementById('name');nm.textContent=s.showCharacterName&&st?st.name:'';nm.style.display=s.showCharacterName&&st?'block':'none';
   document.getElementById('bosses').textContent=ready?`${s.catalogKilled}/${s.bosses.length}`:'—';
-  document.getElementById('kills').textContent=ready?(s.enemyKills||0).toLocaleString():'—';
+  renderEliminations(s);
   document.getElementById('deaths').textContent=st?st.deaths.toLocaleString():'—';
   renderEncounter(s);
   const upcoming=ready?(s.upcoming||[]).slice(0,l.icons):[],emptyLabel=ready?'Lineup complete':s.saveStatus==='error'?'Tracking paused':'Waiting for save';
@@ -498,6 +506,7 @@ function renderDisconnected(){
  connected=false;
  document.querySelector('.card').classList.toggle('source-disconnected',true);
  if(lastState)renderEncounter(lastState,false);
+ renderEliminations(lastState||{},false);
  renderViews(lastState||{},false);renderFreshness(lastState||{},false);updateAnimation();fitNativeWindow();
 }
 async function update(){

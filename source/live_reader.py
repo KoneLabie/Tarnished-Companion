@@ -8,6 +8,7 @@ import ctypes as C
 from ctypes import wintypes as W
 import hashlib
 import struct
+import secrets
 from pathlib import Path
 
 K = C.WinDLL('kernel32', use_last_error=True)
@@ -95,12 +96,106 @@ def unpack_tags(read, fe, module_base, vtable):
             bars.append(dict(name=name,hp=hp,maxHp=maxhp,handle=str(handle)))
     return bars
 
+def unpack_enemy_tags(read, fe):
+    """Read only the eight enemy HUD slots, excluding friendly/player tags.
+
+    An enemy's name is not supplied by this HUD. Never interpret another string
+    or a player tag as an enemy identity. Handles keep measurements separate.
+    """
+    displays = read(fe + 0x59F0, 0x40 * 8)
+    handles = {struct.unpack_from('<Q', displays, i * 0x40)[0]
+               for i in range(8) if displays[i * 0x40 + 0x34] == 1}
+    tags = read(fe + 0x1250, 0x128 * 8)
+    enemies = []
+    for i in range(8):
+        b = tags[i * 0x128:(i + 1) * 0x128]
+        handle = struct.unpack_from('<Q', b, 8)[0]
+        if b[0] != 1 or handle not in handles or handle & 0xFFFFFFFF == 0xFFFFFFFF:
+            continue
+        hp = struct.unpack_from('<I', b, 0x18)[0]
+        difference, uncapped = struct.unpack_from('<II', b, 0x20)
+        maximum = uncapped - difference
+        if 0 <= hp <= maximum <= 100000000 and maximum > 0:
+            enemies.append(dict(name='Enemy target', hp=hp, maxHp=maximum,
+                                handle=str(handle), kind='enemy'))
+    return enemies
+
+
+# Explicit hostile teams from the Elden Ring EMEDF TeamType enum. Friendly
+# NPCs, spirit allies, players, objects and unverified team IDs are excluded.
+HOSTILE_TEAMS = frozenset((6, 7, 9, 13, 21, 23, 24, 25, 27, 29, 33))
+
+
+def unpack_world_enemies(read, world, module_base, module_size, profile):
+    """Bounded read of the supported build's loaded-character distance list."""
+    if struct.unpack('<Q', read(world, 8))[0] != module_base + profile['vtable']:
+        raise ValueError('Unsupported loaded-character layout.')
+    _, first, last, end = struct.unpack('<QQQQ', read(world + profile['distanceVector'], 32))
+    if first == last == end == 0:
+        return []
+    if not 0x10000 <= first <= last <= end < 0x7FFFFFFFFFFF:
+        raise ValueError('Invalid loaded-character list.')
+    if (last - first) % 16 or (end - first) % 16 or (end - first) // 16 > 4096:
+        raise ValueError('Unsupported loaded-character list capacity.')
+    count = (last - first) // 16
+    if count > 1024:
+        raise ValueError('Loaded-character list exceeds the supported read bound.')
+    entries = b''.join(read(first + offset, min(4096, count * 16 - offset))
+                       for offset in range(0, count * 16, 4096))
+    result = []
+    seen = set()
+    for index in range(count):
+        pointer = struct.unpack_from('<Q', entries, index * 16)[0]
+        if pointer in seen:
+            continue
+        seen.add(pointer)
+        try:
+            character = read(pointer, 0x1C8)
+            vtable, handle = struct.unpack_from('<QQ', character)
+            kind = struct.unpack_from('<i', character, 0x68)[0]
+            if (not module_base <= vtable < module_base + module_size
+                    or kind not in (5, 6, 7, 20, 21) or character[0x6C] not in HOSTILE_TEAMS
+                    or handle & 0xFFFFFFFF == 0xFFFFFFFF):
+                continue
+            modules = struct.unpack_from('<Q', character, 0x190)[0]
+            data = struct.unpack('<Q', read(modules, 8))[0]
+            attributes = read(data, 0x140)
+            data_vtable, owner = struct.unpack_from('<QQ', attributes)
+            hp, maximum = struct.unpack_from('<ii', attributes, 0x138)
+            if (owner == pointer and module_base <= data_vtable < module_base + module_size
+                    and 0 <= hp <= maximum <= 100000000 and maximum > 0):
+                # Death/reward flags distinguish actual deaths from temporary
+                # zero-HP states (for example, enemies preparing to revive).
+                defeated=bool(character[0x1C5] & 0x80 or character[0x1C6] & 3)
+                result.append(dict(handle=str(handle), instance=str(pointer), hp=hp, maxHp=maximum,
+                                   defeated=defeated))
+        except (OSError, ValueError):
+            # Objects can unload between reads; disappearance is not a death.
+            continue
+    return result
+
 class LiveReader:
     def __init__(self,profile):
-        self.profile=profile; self.handle=None; self.pid=None; self.fe=None; self.base=0;self.unsupported_pid=None
+        self.profile=profile; self.handle=None; self.pid=None; self.fe=None; self.base=0;self.unsupported_pid=None;self.combat_bars=[];self.combat_handle=None
+        self.module_size=0;self.npc_samples=[];self.npc_session=None;self.npc_status='Waiting for live enemy data.'
     def close(self):
         if self.handle:K.CloseHandle(self.handle)
         self.handle=None; self.pid=None; self.fe=None
+        self.combat_bars=[];self.combat_handle=None
+        self.npc_samples=[];self.npc_session=None;self.npc_status='Live enemy tracking is paused.'
+
+    def poll_npcs(self):
+        self.npc_samples=[]
+        profile=self.profile.get('eliminations')
+        if not isinstance(profile,dict):
+            self.npc_status='This game profile does not support elimination tracking.'
+            return
+        try:
+            world=struct.unpack('<Q',self.read(self.base+profile['singleton'],8))[0]
+            self.npc_samples=unpack_world_enemies(self.read,world,self.base,self.module_size,profile)
+            self.npc_status='Live enemy data connected.'
+        except (OSError,ValueError):
+            self.npc_status='Waiting for valid loaded-enemy data.'
     def read(self,addr,size):
         if not 0x10000<=addr<0x7FFFFFFFFFFF or not 0<size<=4096:
             raise ValueError('Invalid or unsupported game pointer.')
@@ -130,7 +225,7 @@ class LiveReader:
             if eac_present(process_list()):return [],'BLOCKED: EAC detected.'
             h=K.OpenProcess(0x0010|0x1000,False,pid) # VM_READ + QUERY_LIMITED_INFORMATION only
             if not h:raise OSError('Read access was refused. No privileges were elevated.')
-            self.handle=h;self.pid=pid;self.base=base
+            self.handle=h;self.pid=pid;self.base=base;self.module_size=size;self.npc_session=secrets.token_hex(16)
         if self.fe is None:
             matches=set()
             for rva in self.profile['singletons']:
@@ -141,8 +236,24 @@ class LiveReader:
             if len(matches)!=1:return [],'Waiting for game UI to load (live reader is experimental).'
             self.fe=matches.pop()
         try:
+            self.poll_npcs()
             bars=unpack_tags(self.read,self.fe,self.base,self.profile['vtable'])
-            return bars,('Live boss data connected.' if bars else 'Connected — no active boss health bar.')
+            # Boss HP remains the source for encounter detection. Ordinary enemy
+            # HUD targets feed combat estimates only, never boss timers/routes.
+            enemies = unpack_enemy_tags(self.read, self.fe) if not bars else []
+            # A lingering zero-HP tag from a different enemy must not replace
+            # the result of the target we actually observed being damaged.
+            enemies = [b for b in enemies if b['hp'] > 0 or b['handle'] == self.combat_handle]
+            targets = bars or enemies
+            active = next((b for b in targets if b['handle'] == self.combat_handle), None)
+            if active is not None:
+                targets = [active] + [b for b in targets if b is not active]
+            self.combat_bars = targets
+            self.combat_handle = targets[0]['handle'] if targets else None
+            return bars,('Live boss data connected.' if bars else
+                         'Live enemy data connected.' if enemies else
+                         'Connected — no active boss health bar.')
         except (OSError,ValueError,UnicodeError):
-            self.fe=None
+            self.fe=None;self.combat_bars=[];self.combat_handle=None
+            self.npc_samples=[];self.npc_status='Waiting for valid game data.'
             return [],'Waiting for valid game UI data.'

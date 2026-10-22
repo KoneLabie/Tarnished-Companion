@@ -447,6 +447,40 @@ class ModeIntegrationTests(unittest.TestCase):
         self.assertIsNone(self.tracker.manual)
         self.assertEqual(self.tracker.state()['current']['name'], 'Boss')
 
+    def test_enemy_dps_does_not_create_boss_fights_and_clears_on_disconnect(self):
+        self.tracker.live_enabled = True
+        self.tracker.live.poll.return_value = ([], 'Live enemy data connected.')
+        self.tracker.live.combat_bars = [dict(handle='enemy-1', name='Enemy target', hp=1000, maxHp=1000)]
+        self.tracker.live_tick()
+        self.tracker.live.combat_bars[0]['hp'] = 825
+        self.tracker.live_tick()
+        state = self.tracker.state()
+        self.assertEqual(state['combatMetrics']['observedDamage'], 175)
+        self.assertEqual(state['combatMetrics']['status'], 'tracking')
+        self.assertIsNone(state['current'])
+        self.assertIsNone(self.tracker.fight_since)
+        self.tracker.live.poll.return_value = ([], 'BLOCKED: EAC detected.')
+        self.tracker.live_tick()
+        self.assertEqual(self.tracker.state()['combatMetrics']['status'], 'waiting')
+        self.assertIsNone(self.tracker.state()['combatMetrics']['observedDamage'])
+
+    def test_automatic_eliminations_flow_to_api_and_pause_when_live_mode_closes(self):
+        self.tracker.live_enabled=True
+        self.tracker.live.npc_status='Live enemy data connected.'
+        self.tracker.live.npc_session='game-one'
+        self.tracker.live.poll.return_value=([], 'Connected — no active boss health bar.')
+        enemy=dict(handle='1',instance='1000',hp=100,maxHp=100,defeated=False)
+        self.tracker.live.npc_samples=[enemy]
+        self.tracker.live_tick()
+        enemy.update(hp=0,defeated=True)
+        self.tracker.live_tick()
+        self.assertEqual(self.tracker.state()['enemyKills'],1)
+        self.assertEqual(self.tracker.state()['eliminations']['status'],'tracking')
+        self.tracker.live_enabled=False
+        self.tracker.live_tick()
+        self.assertEqual(self.tracker.state()['enemyKills'],1)
+        self.assertEqual(self.tracker.state()['eliminations']['status'],'paused')
+
     def test_encrypted_export_and_token_protection(self):
         url, headers = self.server()
         with self.assertRaises(HTTPError) as no_run:

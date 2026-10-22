@@ -39,6 +39,7 @@ from lineup_presets import build_presets
 from published_records import PublishedRecords
 from offline_launch import OfflineLauncher, request_existing_play, prepare_installed_game
 from app_paths import default_data_dir
+from eliminations import Eliminations
 
 ROOT=Path(getattr(sys,'_MEIPASS',Path(__file__).parent))
 BOSSES=json.loads((ROOT/'data/bosses.json').read_text(encoding='utf-8'))
@@ -135,6 +136,7 @@ class Tracker:
         self.recent=[];self.server=None;self.port=18473;self.overlay_process=None
         trusted_start=self.integrity.begin_update()
         self.combat_metrics=CombatMetrics();self.speedrun=SpeedrunMetrics(self.dir)
+        self.eliminations=Eliminations(self.dir)
         self.external_run=ExternalRun(self.dir);self.attempts=BossAttempts(self.dir,recover_interrupted=trusted_start)
         self.run_policy=RunPolicy(self.dir)
         self.published_records=PublishedRecords(self.dir)
@@ -272,15 +274,25 @@ class Tracker:
                 self.bars=[];self.manual=None;self.fight_since=None;self.fight_id=None
     def live_tick(self):
         if not self.live_enabled or self.save_status!='connected':
-            with self.lock:self.combat_metrics.reset()
+            with self.lock:
+                self.combat_metrics.reset();self.eliminations.pause()
             self.live.close();return
+        observed_context=self.context
         try:bars,status=self.live.poll()
         except Exception as e:
             self.live.close();bars=[];status='Live reader paused: '+str(e)
         with self.lock:
             if not self.live_enabled or self.save_status!='connected':return
+            if observed_context!=self.context:
+                self.eliminations.pause();return
             self.live_status=status;self.bars=bars
-            self.combat_metrics.update(self.context,bars,available=self.manual is None and status=='Live boss data connected.')
+            npc_status=getattr(self.live,'npc_status',None)
+            self.eliminations.update(self.context,getattr(self.live,'npc_session',None),
+                getattr(self.live,'npc_samples',None),available=npc_status=='Live enemy data connected.',
+                boss_handles=[bar['handle'] for bar in bars])
+            targets=getattr(self.live,'combat_bars',None)
+            if not isinstance(targets,list) or not targets:targets=bars
+            self.combat_metrics.update(self.context,targets,available=self.manual is None and status in ('Live boss data connected.','Live enemy data connected.','Connected — no active boss health bar.'))
             if self.manual is not None:return
             if bars:
                 self.last_seen=time.monotonic()
@@ -474,7 +486,9 @@ class Tracker:
                 fightSeconds=int(time.monotonic()-self.fight_since) if self.fight_since and current else 0,
                 upcoming=[BY_ID[i] for i in next_ids[:8]] if self.save_status=='connected' else [],recent=[BY_ID[i] for i in self.recent if i in self.catalog_ids],
                 completed=sum(i in self.killed for i in route),total=len(route),catalogKilled=len(self.killed & self.catalog_ids),
-                enemyKills=self.context_cfg()['enemyKills'],showCharacterName=bool(self.cfg.get('showCharacterName',True)),
+                enemyKills=self.eliminations.snapshot(self.context)['total'],eliminations=self.eliminations.snapshot(self.context),
+                eliminationReaderStatus=getattr(self.live,'npc_status',None) if isinstance(getattr(self.live,'npc_status',None),str) else 'Waiting for live enemy data.',
+                showCharacterName=bool(self.cfg.get('showCharacterName',True)),
                 overlayView=self.cfg.get('overlayView','home'),combatMetrics=self.combat_metrics.snapshot(),speedrun=self.run_state(),
                 bossAttempts=self.attempts.snapshot() if self.capture_enabled() and self.run_policy.can_export(self.context) and not self.integrity.tainted else {},
                 routeManaged=self.capture_enabled() and bool(self.run_policy.snapshot().get('selectedId')),
@@ -601,9 +615,7 @@ class Tracker:
             elif op=='manual':
                 raise ValueError('Boss encounters are detected automatically. Manual fight actions are disabled.')
             elif op=='enemyKills':
-                value=payload.get('value')
-                if type(value)!=int or not 0<=value<=999999:raise ValueError('Kill total must be between 0 and 999,999.')
-                self.context_cfg()['enemyKills']=value;self.persist()
+                raise ValueError('Manual enemy kill counting has been removed.')
             elif op=='resetTracking':
                 record=self.cfg['characters'].get(slot_key(self.cfg['save'],self.cfg['slot']))
                 if record:record['active']=False

@@ -156,18 +156,23 @@ class ProgressTests(unittest.TestCase):
         self.assertEqual(self.tracker.killed, {app.DLC[0]})
         self.assertEqual(self.save.read_bytes(), b'synthetic')
 
+    def test_manual_kill_actions_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'removed'):
+            self.tracker.action(dict(action='enemyKills', value=18))
+        self.assertIsNone(self.tracker.state()['enemyKills'])
+
     def test_restart_preserves_current_journey_counter(self):
         self.saved['journey'] = 3
         self.refresh()
         context = self.tracker.context
-        self.tracker.action(dict(action='enemyKills', value=18))
+        self.tracker.context_cfg()['enemyKills'] = 18; self.tracker.persist()
         self.tracker = app.Tracker(self.root / 'settings')
         self.refresh()
         self.assertEqual(self.tracker.context, context)
         self.assertEqual(self.tracker.context_cfg()['enemyKills'], 18)
 
     def test_observed_empty_slot_reuse_cannot_inherit_same_name_counters(self):
-        self.tracker.action(dict(action='enemyKills', value=42))
+        self.tracker.context_cfg()['enemyKills'] = 42; self.tracker.persist()
         original = copy.deepcopy(self.roster)
         self.roster.clear()
         self.tracker.signature = None
@@ -184,7 +189,7 @@ class ProgressTests(unittest.TestCase):
     def test_same_journey_flag_rollback_restarts_local_counter(self):
         self.saved['killed'] = [app.DLC[0]]
         self.refresh()
-        self.tracker.action(dict(action='enemyKills', value=21))
+        self.tracker.context_cfg()['enemyKills'] = 21; self.tracker.persist()
         self.saved['killed'] = []
         self.roster[0]['seconds'] += 1
         self.refresh()

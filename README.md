@@ -1,6 +1,10 @@
 # Tarnished Companion
 
-A standalone Elden Ring progress tracker with a translucent OBS overlay and a personal desktop overlay. It shows the current boss (or character stats when idle), progress, deaths, a manual enemy-kill counter, and an icon-only upcoming boss lineup. Uses local portrait artwork and makes installed expansion encounters available automatically.
+Automatic eliminations record regular hostile-enemy deaths observed while the supported offline live reader is connected. Loaded NPC health and death/reward flags are checked even without a visible health bar. Boss encounters, players, friendly NPCs, summons and objects are excluded. A disappearing NPC does not count. Respawned enemies can count again after another confirmed death.
+
+Totals are saved separately for each character and journey and survive app restarts. Legacy manual counts are never imported. Past kills and deaths missed while tracking was unavailable cannot be reconstructed. Ally or environmental enemy deaths can count; this does not identify the player's killing blow. Open info for tracking and storage status.
+
+A standalone Elden Ring progress tracker with a translucent OBS overlay and a personal desktop overlay. It shows the current boss (or character stats when idle), progress, deaths, and an icon-only upcoming boss lineup. Uses local portrait artwork and makes installed expansion encounters available automatically.
 
 ## Quick start
 
@@ -13,7 +17,7 @@ A standalone Elden Ring progress tracker with a translucent OBS overlay and a pe
 
 For a visual tour, open [the local preview walkthrough](http://127.0.0.1:18473/preview) while the app is running. One enlarged overlay sits beside visible scene explanations and numbered things to look for. Use Previous/Next, step dots, arrow keys or a horizontal swipe. Each scene can be revisited through its link. All characters, fights and timers are **simulated**; nothing in the walkthrough changes your records. Its signed, encrypted sample uses an ephemeral, untrusted signer and cannot represent a real run.
 
-No Vortex installation or Twitch login is needed. The save is read locally and is never uploaded. Run reports contain selected observations that you choose to export and submit. Regular enemy kills are not stored by Elden Ring, so that counter is manual. Current boss identification is automatic only: there is no manual boss selector, Set fight or Clear control. Live detection is limited to supported game builds in an offline session with Easy Anti-Cheat absent. Save progress remains available when live detection is unavailable.
+No Vortex installation or Twitch login is needed. The save is read locally and is never uploaded. Run reports contain selected observations that you choose to export and submit. Eliminations are automatic; no manual counter controls are available. Current boss identification is automatic only: there is no manual boss selector, Set fight or Clear control. Live detection is limited to supported game builds in an offline session with Easy Anti-Cheat absent. Save progress remains available when live detection is unavailable.
 
 The installer checks Microsoft Edge WebView2 Runtime and installs it automatically if missing, using Microsoft's included bootstrapper. That prerequisite installation needs internet. The portable executable expects the Runtime already installed. The startup panel explains any blocked session; an already-running protected game is never stopped or replaced. See [installer and automatic startup details](source/installer/README.md).
 
@@ -31,7 +35,7 @@ These are suggested personal queues. Search, area filtering, defeated-state filt
 
 Boss completion is read from the selected character's current save flags. Defeating a boss anywhere in the catalog updates progress; the lineup is only your preferred upcoming order. You can search all encounters, see defeated status and location, and add, remove or reorder your lineup. Unsaved edits survive dashboard refreshes.
 
-The saved journey counter identifies Journey 1, Journey 2 and later runs. A new journey starts a separate manual enemy-kill count at zero and keeps your lineup preference. Bosses already defeated in that journey remain correctly marked. Switching characters restores their separate tracking contexts. Character playtime and deaths are that character's saved totals; playtime is never summed across slots or increased by app uptime.
+The saved journey counter identifies Journey 1, Journey 2 and later runs. A new journey loads its own boss progress and keeps your lineup preference. Bosses already defeated in that journey remain correctly marked. Switching characters restores their separate tracking contexts. Character playtime and deaths are that character's saved totals; playtime is never summed across slots or increased by app uptime.
 
 With multiple characters, choose the character at startup. The tracker follows a single character whose saved playtime advances; switches therefore appear after the game saves. Live boss HP comes from the game, but the live reader does not verify character identity. Keep the selected character correct until a save confirms a switch. Repeated boss names are not assigned to a location based on lineup order.
 
@@ -47,7 +51,7 @@ Use **Show boss damage and weakness icons** in Overlay appearance to hide this s
 
 ## Combat and speedrun views
 
-The sword view estimates the current boss's damage taken from consecutive live health-bar samples. It shows rolling five-second DPS, average DPS, observed HP loss, largest sampled HP drop, and observed fight duration. Damage includes summons, other players and status effects; the reader cannot attribute it to the player alone or identify individual hits. Healing is not counted as damage. Missing samples, a new health bar/phase, or a character change restart the observation. This view requires the existing supported offline live reader.
+The sword view estimates damage taken from consecutive live health-bar samples. It prioritizes the current boss and otherwise follows a visible enemy target. Ordinary enemies do not start boss timers or alter the boss lineup. Initial damage before a health bar appears cannot be reconstructed. It shows rolling five-second DPS, average DPS, observed HP loss, largest sampled HP drop, and observed fight duration. Damage includes summons, other players and status effects; the reader cannot attribute it to the player alone or identify individual hits. Healing is not counted as damage. Missing samples, a new health bar/phase, or a character change restart the observation. Brief HUD gaps of up to two seconds keep the same target observation; longer gaps start fresh measurements. When a target disappears, the last result remains visibly paused until the next target or a reader/character change. This view requires the existing supported offline live reader.
 
 The timer view uses a read-only **LiveSplit + SoulSplitter** connection. Select your category in the dashboard before the run; the selection saves automatically. A custom name saves when you finish editing it. Configure the same category in LiveSplit, activate SoulSplitter with **Start automatically**, choose **Game Time**, and use **Control → Start TCP Server** (normally port 16834). The overlay follows its start, time, pause, reset and finish without sending timer-control commands. SoulSplitter starts on the first advance of the new character's game clock, not when you begin browsing character-creation options. No Escape-key pause is added: opening a menu must follow the accepted timer's behavior. Keep LiveSplit visible in the recording and check your category's [current rules](https://www.speedrun.com/eldenring?rules=game).
 

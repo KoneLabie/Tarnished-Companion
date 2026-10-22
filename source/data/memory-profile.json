@@ -222,5 +222,10 @@
     75911424,
     75911600,
     75912128
-  ]
+  ],
+  "eliminations": {
+    "singleton": 64409624,
+    "vtable": 44370384,
+    "distanceVector": 127424
+  }
 }

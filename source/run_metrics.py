@@ -1,6 +1,6 @@
 """Read-only, explicitly bounded combat estimates and local speedrun timing.
 
-Combat samples measure visible boss HP loss, not player-attributed damage. Run
+Combat samples measure visible target HP loss, not player-attributed damage. Run
 splits are observed save flags, not exact frame timings or official category IGT.
 """
 from collections import deque
@@ -31,7 +31,7 @@ class CombatMetrics:
     """Estimate damage using one stable health-bar identity at a time."""
     WINDOW = 5.0
     MAX_GAP = 2.0
-    NOTE = ('Estimated boss HP loss; includes summons, allies and status damage. '
+    NOTE = ('Estimated target HP loss; includes summons, allies and status damage. '
             'Largest drop is one sample, not one hit. Resets after a gap or phase change.')
 
     def __init__(self):
@@ -39,6 +39,7 @@ class CombatMetrics:
 
     def reset(self):
         self.identity = None
+        self.last_summary = None
         self.started = self.last_at = None
         self.last_hp = self.max_hp = None
         self.name = None
@@ -48,9 +49,20 @@ class CombatMetrics:
     def update(self, context, bars, available, now=None):
         now = _clock(now)
         bar = bars[0] if isinstance(bars, list) and bars else None
-        if (not available or not isinstance(context, str) or not context or context == 'pending'
-                or not isinstance(bar, dict)):
+        if not available or not isinstance(context, str) or not context or context == 'pending':
             self.reset()
+            return
+        if not isinstance(bar, dict):
+            if self.identity is not None and self.identity[0] != context:
+                self.reset()
+            elif self.last_at is not None and self.last_summary is None:
+                if now < self.last_at or now - self.last_at > self.MAX_GAP:
+                    self.reset()
+                else:
+                    # A disappearing HUD is not proof of a kill. Retain the
+                    # last sample visibly paused instead of erasing a short fight.
+                    self.last_summary = self.snapshot(self.last_at)
+                    self.last_summary['status'] = 'last-target'
             return
         hp, maximum, name, handle = (bar.get(k) for k in ('hp', 'maxHp', 'name', 'handle'))
         if (not _number(hp) or not _number(maximum) or not 0 <= hp <= maximum <= 100000000
@@ -59,10 +71,15 @@ class CombatMetrics:
             self.reset()
             return
         identity = (context, str(handle), name, maximum)
+        if (self.last_summary is not None and identity == self.identity
+                and self.last_at is not None and 0 <= now - self.last_at <= self.MAX_GAP):
+            # Enemy tags briefly hide between hits or lock-on changes. The
+            # existing two-second sample bound also limits this continuation.
+            self.last_summary = None
         # Full-health recovery can signal a new attempt, even when HUD handles are reused.
         restored = (self.last_hp is not None and hp >= maximum * .99
                     and self.last_hp < maximum * .9)
-        if (identity != self.identity or self.last_at is None or now < self.last_at
+        if (self.last_summary is not None or identity != self.identity or self.last_at is None or now < self.last_at
                 or now - self.last_at > self.MAX_GAP or restored):
             self.reset()
             self.identity, self.started = identity, now
@@ -80,6 +97,8 @@ class CombatMetrics:
 
     def snapshot(self, now=None):
         now = _clock(now)
+        if self.last_summary is not None:
+            return copy.deepcopy(self.last_summary)
         empty = dict(status='waiting', rollingDps=None, averageDps=None,
                      observedDamage=None, largestDrop=None, observedSeconds=None,
                      hpPercent=None, bossName=None, note=self.NOTE)
