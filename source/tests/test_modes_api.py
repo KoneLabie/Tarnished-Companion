@@ -23,6 +23,10 @@ class ModeIntegrationTests(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.directory = Path(directory.name)
+        # Route/category fixtures include DLC even on runners without the game.
+        dlc_patch = patch('app.detect_dlc', return_value=dict(available=True, status='installed'))
+        dlc_patch.start()
+        self.addCleanup(dlc_patch.stop)
         with patch('app.discover_saves', return_value=[]), patch('app.LiveReader', return_value=Mock()):
             self.tracker = app.Tracker(self.directory)
         self.tracker.context = 'v2:test_character:j1'

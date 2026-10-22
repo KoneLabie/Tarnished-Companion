@@ -23,6 +23,8 @@ class ProgressTests(unittest.TestCase):
         self.saved = dict(name='Tarnished', level=100, origin='Hero', originId=2,
                           startingGift=3, journey=1, runes=0, deaths=9, killed=[], version=262)
         for target, value in [
+            # These fixtures exercise DLC routes without depending on a local installation.
+            ('app.detect_dlc', lambda: dict(available=True, status='installed')),
             ('app.discover_saves', lambda: []),
             ('app.LiveReader', lambda _: None),
             ('app.read_stable', lambda _: b'synthetic'),
