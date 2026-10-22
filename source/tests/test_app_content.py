@@ -65,6 +65,50 @@ class ContentIntegrationTests(unittest.TestCase):
         self.assertEqual(tracker.context_cfg()['route'], tracker.presets['Major bosses + DLC'])
         self.assertEqual(tracker.catalog_ids, set(app.BY_ID))
 
+    def test_real_steam_detection_drives_catalog_and_rescans_without_game(self):
+        from dlc_detection import detect_dlc
+
+        library = self.root / 'steam-library'
+        steamapps = library / 'steamapps'
+        game = steamapps / 'common' / 'ELDEN RING' / 'Game'
+        game.mkdir(parents=True)
+        (game / 'eldenring.exe').write_bytes(b'synthetic executable marker')
+        manifest = steamapps / 'appmanifest_1245620.acf'
+
+        def write_manifest(dlc):
+            depot = ('"2778580" { "manifest" "123" "size" "16000000000" '
+                     '"dlcappid" "2778580" }') if dlc else ''
+            manifest.write_text(
+                '"AppState" { "appid" "1245620" "stateflags" "4" '
+                '"installdir" "ELDEN RING" "InstalledDepots" { '
+                '"1245621" { "manifest" "123" "size" "456" } ' + depot + ' } }',
+                encoding='utf-8')
+
+        # Keep the production detector; substitute only discovery and archive size.
+        self.detector.side_effect = detect_dlc
+        with patch('dlc_detection._steam_roots', return_value=[library]), \
+                patch('dlc_detection.MIN_ARCHIVE_BYTES', 32):
+            write_manifest(False)
+            tracker = self.make_tracker('real-detector')
+            self.assertEqual(tracker.dlc['status'], 'not-detected')
+            self.assertFalse(tracker.dlc['include'])
+            self.assertEqual(len(tracker.catalog), 166)
+
+            write_manifest(True)
+            for name, size in (('DLC.bdt', 32), ('DLC.bhd', 4096)):
+                (game / name).write_bytes(b'\0' * size)
+            tracker.action({'action': 'rescanDlc'})
+            self.assertEqual(tracker.dlc['status'], 'detected')
+            self.assertTrue(tracker.dlc['include'])
+            self.assertEqual(len(tracker.catalog), 208)
+            self.assertIn('DLC main route', tracker.presets)
+
+            (game / 'DLC.bdt').write_bytes(b'')
+            tracker.action({'action': 'rescanDlc'})
+            self.assertEqual(tracker.dlc['status'], 'inconsistent-installation')
+            self.assertFalse(tracker.dlc['include'])
+            self.assertEqual(len(tracker.catalog), 166)
+
     def test_unknown_or_nonboolean_detection_never_exposes_content(self):
         for available in (None, 1, 'true'):
             with self.subTest(available=available):
