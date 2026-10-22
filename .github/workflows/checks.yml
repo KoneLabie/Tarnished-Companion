@@ -1,0 +1,47 @@
+name: Tracker regression checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python runtime dependencies
+        run: python -m pip install -r source/requirements.txt
+      - name: Save and progress regression tests
+        run: python -m unittest discover -s source/tests -p "test_*.py" -v
+      - name: Overlay behavior
+        run: node source/tests/test_overlay.cjs
+      - name: Dashboard behavior
+        run: node source/tests/test_dashboard.cjs
+      - name: Published record display
+        run: node source/tests/test_published_records_ui.cjs
+      - name: Install verifier dependencies
+        working-directory: bot
+        run: npm ci
+      - name: Encrypted verifier and interoperability checks
+        working-directory: bot
+        run: npm test
+      - name: Native overlay button interaction
+        shell: pwsh
+        run: |
+          $nativeTestDir = Join-Path $env:RUNNER_TEMP 'tarnished-native-tests'
+          New-Item -ItemType Directory -Force -Path $nativeTestDir | Out-Null
+          $nativeCompiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
+          $nativeLibrary = Join-Path $nativeTestDir 'LayeredOverlay.dll'
+          $nativeTest = Join-Path $nativeTestDir 'NativeInteractionTest.exe'
+          $nativeSource = (Resolve-Path 'source/native/LayeredOverlay.cs').Path
+          $nativeTestSource = (Resolve-Path 'source/tests/native_interaction.cs').Path
+          & $nativeCompiler /nologo /target:library /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "/out:$nativeLibrary" $nativeSource
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $nativeCompiler /nologo /target:exe /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "/reference:$nativeLibrary" "/out:$nativeTest" $nativeTestSource
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $nativeTest
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

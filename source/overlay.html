@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tarnished Lineup — OBS</title><link rel="icon" href="/favicon.ico">
+<style>
+@font-face{font-family:'Cinzel';src:url('/fonts/Cinzel.ttf') format('truetype');font-display:swap}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;width:100%;min-height:100%;overflow:hidden;background:transparent;color:#eee5d3;font:13px/1.25 Segoe UI,Arial,sans-serif}
+.card{width:min(360px,100vw);padding:10px;background:linear-gradient(145deg,rgba(14,12,11,.72),rgba(23,19,16,.68));border:1px solid #655334b8;border-radius:9px;box-shadow:0 3px 16px #0005}
+.head{display:flex;flex-direction:column;gap:8px;padding-bottom:8px}
+.head-top{display:flex;align-items:center;gap:8px;min-height:28px}.head-top .name{flex:1;min-width:0}
+.view-nav{display:flex;gap:5px;margin-left:auto;flex:0 0 auto}
+button{font:600 11px/1.3 Segoe UI,Arial,sans-serif;cursor:pointer;color:#ddc99b;background:#211b15;border:1px solid #695536;border-radius:5px;padding:6px 9px}
+button:hover{background:#32271b;border-color:#aa8850}button:focus-visible{outline:2px solid #e7ce8b;outline-offset:2px}button:disabled{cursor:default;opacity:.45}
+.view-button{display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:4px;background:#151210c9;border-color:#4d402e}
+.view-button svg{width:18px;height:18px;pointer-events:none}.view-button[aria-pressed=true]{color:#f1d38d;border-color:#b99451;background:#342716}
+.view-panel{border-top:1px solid #332c21;border-bottom:1px solid #332c21;padding:11px 0 10px}
+.panel-heading{font:15px/1.35 var(--overlay-font,Georgia),Georgia,serif;color:#e9d6ad;overflow-wrap:anywhere;margin:0 0 3px}
+.panel-subtitle,.panel-note{font:10px/1.5 Segoe UI;color:#a99b83;overflow-wrap:anywhere}.panel-subtitle{margin-top:3px}.panel-note{margin-top:9px}
+.metrics-hero{padding:14px 0 12px;text-align:center}.metrics-hero small{display:block;color:#bba77e;font:600 9px/1.35 Segoe UI;letter-spacing:.09em;text-transform:uppercase}.metrics-hero strong{display:block;color:#ead293;font:600 39px/1.15 Segoe UI;font-variant-numeric:tabular-nums;margin-top:4px}.metrics-hero .unit{font:11px Segoe UI;color:#a99979;margin-left:5px}
+.metrics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid #3b3023;border-radius:5px;overflow:hidden;background:#120f0c85}
+.metrics-cell{padding:8px;min-width:0}.metrics-cell:nth-child(even){border-left:1px solid #3b3023}.metrics-cell:nth-child(n+3){border-top:1px solid #3b3023}.metrics-cell small{display:block;font:600 8px/1.3 Segoe UI;color:#aa9b7d;text-transform:uppercase;letter-spacing:.06em}.metrics-cell b{display:block;font:600 16px/1.3 Segoe UI;color:#eee5d3;font-variant-numeric:tabular-nums;margin-top:3px;overflow-wrap:anywhere}
+.run-heading{display:flex;justify-content:space-between;align-items:start;gap:7px}.run-badge{color:#c8bb9c;background:#251f16;border:1px solid #4f422d;border-radius:3px;padding:3px 5px;font:600 8px Segoe UI;text-transform:uppercase;letter-spacing:.06em}.run-badge[data-status=running]{color:#c9d3a1;border-color:#6b7547}.run-badge[data-status=paused],.run-badge[data-status=interrupted]{color:#e0bb80}
+.run-controls{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.run-controls button{flex:1;min-width:80px}.run-controls .secondary{background:#15120f;color:#b7aa91;border-color:#4b402f}
+.splits{margin-top:11px}.splits-heading{font:600 8px Segoe UI;color:#aa9b7d;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}.split-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start;border-bottom:1px solid #30291f;padding:6px 0;font:10px/1.35 Segoe UI}.split-row span{overflow-wrap:anywhere;color:#d0c3aa}.split-row time{color:#e2c98e;font-variant-numeric:tabular-nums;white-space:nowrap}.splits-empty{font:10px/1.45 Segoe UI;color:#998e79}
+.export-button{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:11px}.export-button svg{width:15px;height:15px;pointer-events:none}
+.action-message{font:10px/1.4 Segoe UI;color:#d6bd8b;margin-top:7px;overflow-wrap:anywhere}.action-message.error{color:#e3a094}
+.attempt-slot{margin:9px 0 2px}.attempt-panel{border:1px solid #51432f;border-radius:5px;padding:8px;background:#17120e80}
+.attempt-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.attempt-heading .eyebrow{margin-bottom:2px}.attempt-name{font:12px/1.35 var(--overlay-font,Georgia),Georgia,serif;color:#dec99f;overflow-wrap:anywhere}.attempt-clock{font:600 22px/1.1 Segoe UI;color:#e8cf8c;font-variant-numeric:tabular-nums;white-space:nowrap}.attempt-clock.unavailable{color:#a99a83}
+.attempt-result{font:9px/1.4 Segoe UI;color:#b7a990;margin-top:4px}.attempt-result.death,.attempt-result.interrupted{color:#e29987}.attempt-result.victory{color:#b6cc94}
+.pace-track{position:relative;height:12px;border:1px solid #534735;border-radius:3px;margin-top:10px;background:#37312a;overflow:visible}.pace-bands{height:100%;display:flex;overflow:hidden;border-radius:2px}.pace-band{height:100%;flex-shrink:0}.pace-band.best{background:#6aa45c}.pace-band.near{background:#d4b94e}.pace-band.average{background:#c7843d}.pace-band.slower{background:#a34b43}.pace-marker{position:absolute;top:-4px;bottom:-4px;left:var(--pace-position,0%);width:2px;background:#fff1c8;box-shadow:0 0 3px #000;transform:translateX(-50%)}
+.pace-axis{display:flex;justify-content:space-between;font:8px/1.3 Segoe UI;color:#ae9d7d;margin-top:5px}.pace-axis .overflow{color:#e39b87}.pace-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}.pace-legend span{font:8px/1.3 Segoe UI;color:#bba98c;min-width:0}.pace-legend b{display:block;font:600 11px/1.3 Segoe UI;color:#e4d4b4;font-variant-numeric:tabular-nums;margin-top:2px}.pace-legend .best{border-top:2px solid #6aa45c;padding-top:4px}.pace-legend .near{border-top:2px solid #d4b94e;padding-top:4px}.pace-legend .average{border-top:2px solid #c7843d;padding-top:4px}.pace-note{font:8px/1.4 Segoe UI;color:#a99b83;margin-top:6px;overflow-wrap:anywhere}
+.published-record{margin:0 0 11px;padding:8px 0 9px;border-top:1px solid #3b3023;border-bottom:1px solid #3b3023}.record-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}.record-heading strong{font:600 8px/1.4 Segoe UI;color:#bba77e;letter-spacing:.07em;text-transform:uppercase}.record-status{font:8px/1.4 Segoe UI;color:#b1c69b}.record-status[data-state=stale],.record-status[data-state=unavailable]{color:#ceb276}.record-status[data-state=simulation]{color:#b6a98d}.published-record .pace-track{height:8px;margin-top:8px}.published-record .pace-legend b{font-size:10px}.published-record>.info-button{margin-top:5px}.record-note{font:8px/1.4 Segoe UI;color:#a99b83;margin-top:5px}
+.name{font:16px var(--overlay-font,Georgia),Georgia,serif;color:#dfc987;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #332c21;border-radius:5px;background:#100e0dc9}
+.stat{text-align:center;padding:5px 2px}.stat+.stat{border-left:1px solid #332c21}
+.stat small,.metric small{display:block;color:#aa9b7d;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.stat b{display:block;color:#eee5d3;font:600 14px Segoe UI}.stat.deaths b{color:#ce7772}.stat.bosses b{color:#d3b76e}
+.main{min-height:82px;padding:8px 0;border-top:1px solid #332c21;border-bottom:1px solid #332c21;display:grid;grid-template-columns:var(--boss-size,108px) minmax(0,1fr);align-items:start;gap:9px}
+.portrait-frame{position:relative;width:var(--boss-size,108px);height:var(--boss-size,108px);border:1px solid #df7364;border-radius:5px;background:#171411;box-shadow:inset 0 0 0 1px #4f201c,0 0 8px #bc302b55}
+.portrait-frame:before{content:'';position:absolute;inset:-2px;z-index:1;pointer-events:none;border:1px solid #f29b7b90;border-radius:6px;box-shadow:0 0 5px #e5524680,0 0 13px #b42b2850;opacity:.7}
+.portrait{display:block;width:100%;height:100%;object-fit:cover;border:2px solid #3e1b18;border-radius:4px;background:#171411}
+.animate-glow .portrait-frame:before{animation:encounter-glow 2.8s ease-in-out infinite}
+@keyframes encounter-glow{0%,100%{opacity:.5;box-shadow:0 0 4px #e5524660,0 0 9px #b42b2838}50%{opacity:1;box-shadow:0 0 8px #f46b58a0,0 0 17px #bd302d66}}
+@media(prefers-reduced-motion:reduce){.animate-glow .portrait-frame:before{animation:none}.health .health-fill{transition:none}}
+.maintext{min-width:0;align-self:start}.main.idle .maintext,.main.no-portrait .maintext{grid-column:1/-1}
+.eyebrow{color:#b69a5a;font:bold 8px Georgia;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+.value{font:15px/1.3 var(--overlay-font,Georgia),Georgia,serif;white-space:normal;overflow-wrap:anywhere;color:#f2e7cf}
+.details{color:#aea38e;font-size:10px;margin-top:5px;line-height:1.5}
+.health{margin-top:9px}.health-heading{display:flex;justify-content:space-between;gap:8px;font-size:9px;letter-spacing:.07em;color:#c7b792}
+.health-heading strong{color:#e2c7a1;font-size:10px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.health-track{height:8px;margin-top:4px;border:1px solid #795436;background:#19100ed9;border-radius:2px;overflow:hidden}
+.health-fill{display:block;height:100%;background:linear-gradient(90deg,#762e28,#ba5b42);transition:width .25s linear}
+.health-note{font:9px/1.4 Segoe UI;color:#a99a80;margin-top:3px;font-variant-numeric:tabular-nums}
+.health.unavailable .health-track{border-color:#524637;background:#211d18}.health.unavailable .health-fill{visibility:hidden}
+.combat-traits{display:grid;gap:4px;margin-top:8px}.combat-traits[hidden]{display:none}
+.trait-row{display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:5px;min-height:22px}
+.trait-label{color:#b5a17d;font:600 8px/1.25 Segoe UI;letter-spacing:.04em;text-transform:uppercase}
+.trait-icons{display:flex;flex-wrap:wrap;align-items:center;gap:3px;min-width:0}
+.combat-icon{display:inline-flex;width:22px;height:22px;flex:0 0 22px;align-items:center;justify-content:center;color:var(--trait-color,#d4cec1);background:#1b1714;border:1px solid #534331;border-radius:4px}
+.combat-icon svg{display:block;width:18px;height:18px;overflow:visible}.combat-icon.status-effect{border-style:dashed;border-color:#7b6650}
+.trait-empty,.traits-note{color:#aa9d88;font:9px/1.35 Segoe UI}.traits-note{margin-top:1px;font-size:8px;overflow-wrap:anywhere}
+.trait-phase{color:#c8b48d;font:600 8px/1.3 Segoe UI;letter-spacing:.04em}
+.traits-unverified{color:#aa9d88;font:9px/1.35 Segoe UI}
+.fight-metrics{grid-column:1/-1;display:grid;grid-template-columns:1.2fr .65fr 1fr;gap:10px;align-items:end;padding-top:7px;border-top:1px solid #332c21}
+.metric{min-width:0}.metric b{display:block;font:600 16px/1.2 Segoe UI;color:#eee5d3;font-variant-numeric:tabular-nums;margin-top:3px;overflow-wrap:anywhere}
+.metric.timer b{font-size:24px;color:#e4cc8b;white-space:nowrap}.metric.runes{text-align:right}
+.lineup{display:flex;flex-wrap:wrap;gap:1px;width:fit-content;max-width:100%;margin:9px auto 0;padding:2px;border:1px solid #655334b8;border-radius:5px;background:rgba(16,14,12,.65)}
+.boss{width:calc(var(--boss-size,108px)/2);flex:0 0 calc(var(--boss-size,108px)/2);aspect-ratio:1;position:relative;border-radius:2px;overflow:hidden;background:#171411}
+.boss img{width:100%;height:100%;object-fit:cover;display:block}.boss:first-child:before{content:'';position:absolute;inset:0;border:1px solid #b69653;z-index:1;border-radius:2px}
+.boss.dlc:after{content:'DLC';position:absolute;right:1px;bottom:1px;padding:1px 2px;background:#2b1d2c;color:#d7b0d3;font:6px Segoe UI}
+.lineup.complete{border:0;background:none;padding:2px}.empty{color:#897f6d;font-size:10px}
+.context-line{display:flex;justify-content:space-between;gap:10px;margin-top:8px;color:#a79a80;font:8px/1.3 Segoe UI;letter-spacing:.06em}
+.source-status{text-align:right}.source-status:before{content:'';display:inline-block;width:4px;height:4px;margin:0 4px 1px 0;border-radius:50%;background:#929670}
+.source-status.warning{color:#d2ae75}.source-status.warning:before{background:#c79a56}
+.source-status.offline{color:#e49488}.source-status.offline:before{background:#d76e60}
+.source-disconnected .portrait-frame{border-color:#7f554c;box-shadow:none}.source-disconnected .portrait-frame:before{opacity:.25;box-shadow:none}
+.info-button{display:inline-block;border:0!important;background:none!important;box-shadow:none!important;border-radius:0;color:#b7a583;font:10px/1.5 Segoe UI,Arial,sans-serif;letter-spacing:0;text-transform:none;text-decoration:none;padding:2px 0}.info-button:hover{color:#ead293}.info-panel{margin:6px 0 2px;padding:8px 0 2px;border-top:1px solid #3a3025;color:#b2a48d;font:10px/1.5 Segoe UI,Arial,sans-serif;overflow-wrap:anywhere}.info-panel p{margin:0 0 6px}.info-panel a{color:#dbc08b;text-decoration:none}.info-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}.info-row .panel-note{margin:0}.category-row{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:7px}.category-row .panel-note{margin:0;min-width:0;font-size:10px;color:#cbbb99}.text-control{border:0;background:none;padding:2px 0;font:10px/1.5 Segoe UI;color:#d7ba79;white-space:nowrap}.text-control:hover{background:none;color:#f0d69c}.run-badge[data-status=recording]{color:#c9d3a1;border-color:#6b7547}.run-badge[data-status=recovering]{color:#e0bb80}.run-badge[data-status=blocked]{color:#e39b87}.pace-note{margin-top:0}.attempt-panel>.info-button{margin-top:5px}#speedrunLineup{margin-top:10px}.context-info{margin-left:auto}
+</style>
+</head>
+<body>
+<div class="card">
+ <div class="head"><div class="head-top"><div class="name" id="name"></div><nav class="view-nav" aria-label="Overlay views">
+  <button type="button" class="view-button" id="combatViewButton" onclick="switchView('combat')" title="Combat stats" aria-label="Show combat stats" aria-pressed="false"></button>
+  <button type="button" class="view-button" id="speedrunViewButton" onclick="switchView('speedrun')" title="Speedrun stats" aria-label="Show speedrun stats" aria-pressed="false"></button>
+ </nav></div><div class="counts">
+  <div class="stat bosses"><small>Bosses</small><b id="bosses">—</b></div>
+  <div class="stat"><small>Kills</small><b id="kills">—</b></div>
+  <div class="stat deaths"><small>Deaths</small><b id="deaths">—</b></div>
+ </div></div>
+ <div class="main" id="main"></div>
+ <div class="attempt-slot" id="homeAttempt" hidden></div>
+ <div class="lineup" id="lineup" aria-label="Upcoming bosses"></div>
+ <section class="view-panel" id="combatPanel" aria-label="Combat statistics" hidden>
+  <div class="eyebrow">Combat statistics</div><h1 class="panel-heading" id="combatBoss">Waiting for a live fight</h1>
+  <div class="metrics-hero"><small>Estimated boss DPS · last 5s</small><strong><span id="rollingDps">—</span><span class="unit">HP/s</span></strong></div>
+  <div class="metrics-grid">
+   <div class="metrics-cell"><small>Average DPS</small><b id="averageDps">—</b></div><div class="metrics-cell"><small>Observed damage</small><b id="observedDamage">—</b></div>
+   <div class="metrics-cell"><small>Largest HP drop</small><b id="largestDrop">—</b></div><div class="metrics-cell"><small>Observed time</small><b id="observedSeconds">—</b></div>
+  </div><div class="panel-subtitle" id="combatHealth"></div>
+  <div class="attempt-slot" id="combatAttempt" hidden></div>
+  <button type="button" class="info-button" aria-expanded="false" onclick="toggleInfo('combatInfo',this)">info</button><div class="info-panel" id="combatInfo" hidden><p>Estimated boss HP loss includes all sources. Sampled drops may contain several hits. Measurements restart after a gap or phase change.</p><p id="combatNote"></p><p>Combat view displays live information only. It does not record run times.</p></div>
+ </section>
+ <section class="view-panel" id="speedrunPanel" aria-label="Speedrun statistics" hidden>
+  <div class="run-heading"><div><div class="eyebrow">Speedrun statistics</div><h1 class="panel-heading" id="runCharacter">New run</h1></div><span class="run-badge" id="runStatus">Ready</span></div>
+  <div class="category-row"><div class="panel-note" id="runCategory">Choose a category</div><button type="button" class="text-control" id="editCategoryButton" onclick="openDashboard()">Edit category</button></div><div class="metrics-hero"><small id="runTimingLabel">LiveSplit game time</small><strong id="runTime">—</strong></div>
+  <div id="publishedRecord" hidden></div>
+  <div class="metrics-grid">
+   <div class="metrics-cell"><small>Saved character IGT</small><b id="runIgt">—</b></div><div class="metrics-cell"><small>Bosses this run</small><b id="runBosses">0</b></div>
+   <div class="metrics-cell"><small>Deaths this run</small><b id="runDeaths">0</b></div><div class="metrics-cell"><small>Journey</small><b id="runJourney">—</b></div>
+  </div>
+  <div class="attempt-slot" id="speedrunAttempt" hidden></div>
+  <div class="splits"><div class="splits-heading">Boss splits</div><div id="runSplits" class="splits-empty">No splits yet</div></div>
+  <div class="info-row"><span class="panel-note" id="runAudit"></span><button type="button" class="info-button" aria-expanded="false" onclick="toggleInfo('runInfo',this)">info</button></div>
+  <div class="info-panel" id="runInfo" hidden><p id="runNotice"></p><p id="runTimingNote"></p><p>Recording is active only in this view. Choose a category, then create a new character while the tracker and game are running. Leaving this view ends the current observation.</p><p>Saved boss completions can arrive after the game saves. LiveSplit and SoulSplitter control timing. Local evidence and signatures do not certify leaderboard eligibility.</p></div>
+  <div class="lineup" id="speedrunLineup" aria-label="Category boss lineup"></div>
+  <button type="button" class="export-button" id="exportRunButton" onclick="exportSpeedrun()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5"/></svg>Export run · .tlrun</button>
+ </section>
+ <div class="action-message" id="actionMessage" role="status" hidden></div>
+ <div class="context-line"><span id="journey"></span><button type="button" class="info-button context-info" aria-expanded="false" onclick="toggleInfo('overlayInfo',this)">info</button><span class="source-status" id="sourceStatus" role="status">Waiting for save</span></div><div class="info-panel" id="overlayInfo" hidden><p>Home and combat views show live information only. Choose the timer view to record a new-character run. Character statistics refresh after game saves.</p></div>
+</div>
+<script>
+const TOKEN='__TOKEN__';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fmt(n){n=Math.max(0,Math.floor(n||0));return `${Math.floor(n/3600)}:${String(Math.floor(n/60)%60).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`}
+function fightTime(n){n=Math.max(0,Math.floor(n||0));return n>=3600?fmt(n):`${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`}
+function bossHealth(c){
+ if(!c||!Number.isFinite(c.hp)||!Number.isFinite(c.maxHp)||c.maxHp<=0||c.hp<0||c.hp>c.maxHp)return null;
+ return {percent:c.hp/c.maxHp*100,hp:Math.floor(c.hp),max:Math.floor(c.maxHp)};
+}
+function saveReady(s){
+ const ready=s?.ready??!!s?.stats;
+ return !!ready&&(s?.saveStatus||'connected')==='connected';
+}
+const VIEW_ICONS={
+ home:'<path d="m3 11 9-8 9 8M5 9v12h5v-7h4v7h5V9"/>',
+ combat:'<path d="m4 20 8-8m-7 1 6 6M12 4h8v8l-7 7-8-8z"/>',
+ speedrun:'<circle cx="12" cy="14" r="8"/><path d="M9 2h6m-3 0v4m0 4v5l3 2M18 7l2-2"/>',
+};
+let actionPending=false,exportPending=false,viewRenderKey='',splitRenderKey='',lastNativeRegions='';
+const attemptRenderKeys={},openInlineInfo=new Set();
+function toggleInfo(id,button){const panel=document.getElementById(id);panel.hidden=!panel.hidden;button?.setAttribute?.('aria-expanded',String(!panel.hidden));fitNativeWindow()}
+function toggleInlineInfo(button,key){const panel=button.nextElementSibling;if(!panel)return;panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden));if(panel.hidden)openInlineInfo.delete(key);else openInlineInfo.add(key);fitNativeWindow()}
+function inlineInfo(content,key){const open=openInlineInfo.has(key);return `<button type="button" class="info-button" aria-expanded="${open}" onclick="toggleInlineInfo(this,'${key}')">info</button><div class="info-panel"${open?'':' hidden'}>${content}</div>`}
+function captureLabel(run,view,isConnected=true){
+ if(!isConnected)return 'Disconnected';
+ if(view!=='speedrun')return 'Not recording';
+ const key=run.captureStatus||run.status||'idle';
+ return ({off:'Not recording','game-closed':'Game closed','game-time-paused':'Game paused','not-recording':'Not recording',inactive:'Not recording',idle:'Not recording',waiting:'Armed',armed:'Armed',running:'Recording',recording:'Recording',paused:'Recovering',recovering:'Recovering',interrupted:'Recovering',disconnected:'Disconnected',finished:'Finished',blocked:'Blocked','review-required':'Needs review'})[key]||'Not recording';
+}
+function viewName(s){return ['combat','speedrun'].includes(s?.overlayView)?s.overlayView:'home'}
+function iconMarkup(kind){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${VIEW_ICONS[kind]}</svg>`}
+function metricNumber(value){return Number.isFinite(value)&&value>=0?Math.round(value).toLocaleString():'—'}
+function showActionMessage(message,isError=false){
+ const el=document.getElementById('actionMessage');el.textContent=message;el.hidden=!message;el.classList.toggle('error',isError);fitNativeWindow();
+}
+function renderViews(s,isConnected=true){
+ const view=viewName(s);
+ document.getElementById('main').hidden=view!=='home';document.getElementById('lineup').hidden=view!=='home';
+ document.getElementById('combatPanel').hidden=view!=='combat';document.getElementById('speedrunPanel').hidden=view!=='speedrun';
+ for(const kind of ['combat','speedrun']){
+  const button=document.getElementById(`${kind}ViewButton`),active=view===kind,label=active?'Return to main overlay':kind==='combat'?'Show combat stats':'Show speedrun stats';
+  button.setAttribute('aria-label',label);button.title=label;button.setAttribute('aria-pressed',String(active));button.disabled=actionPending||!isConnected;
+  if(viewRenderKey!==view)button.innerHTML=iconMarkup(active?'home':kind);
+ }
+ viewRenderKey=view;
+ renderCombatMetrics(s,isConnected);renderSpeedrun(s,isConnected);renderBossAttempts(s,isConnected);
+}
+function attemptSeconds(value){return Number.isFinite(value)&&value>=0?value:null}
+function sameAttemptBoss(attempt,current){
+ if(!attempt||!current)return false;
+ if(Number.isInteger(attempt.bossId)&&Number.isInteger(current.id))return attempt.bossId===current.id;
+ return attempt.name===current.name;
+}
+function matchingAttempt(s){
+ const tracked=s.bossAttempts,attempt=tracked?.active,c=s.current;
+ if(!attempt||c?.source!=='Live game data'||tracked.contextKey&&tracked.contextKey!==s.contextKey)return null;
+ if(!sameAttemptBoss(attempt,c))return null;
+ return attempt;
+}
+function currentFightSeconds(s){
+ if(s.current?.source!=='Live game data'||!s.bossAttempts)return attemptSeconds(s.fightSeconds);
+ const active=matchingAttempt(s);
+ if(active)return attemptSeconds(active.elapsedSeconds);
+ const last=s.bossAttempts.lastAttempt,contextMatches=!s.bossAttempts.contextKey||s.bossAttempts.contextKey===s.contextKey;
+ if(contextMatches&&last?.outcome==='death'&&sameAttemptBoss(last,s.current))return 0;
+ if(viewName(s)!=='speedrun')return attemptSeconds(s.fightSeconds);
+ return null;
+}
+function bossAttemptMarkup(s,isConnected=true){
+ const tracked=s.bossAttempts;
+ if(!tracked||tracked.contextKey&&tracked.contextKey!==s.contextKey)return '';
+ if(s.current&&s.current.source!=='Live game data')return '';
+ const active=tracked.active,last=tracked.lastAttempt,attempt=active||last;
+ if(!attempt||typeof attempt.name!=='string')return '';
+ if(active&&s.current&&!sameAttemptBoss(active,s.current))return '';
+ const ready=isConnected&&saveReady(s),seconds=attemptSeconds(attempt.elapsedSeconds),elapsed=active&&!ready?null:seconds;
+ const b=tracked.benchmarks||{},best=attemptSeconds(b.bestSeconds),near=attemptSeconds(b.nearBestSeconds),average=attemptSeconds(b.averageSeconds),samples=Number.isInteger(b.sampleCount)&&b.sampleCount>0?b.sampleCount:0;
+ const hasBenchmarks=samples>0&&best!==null,clamp=n=>Math.max(0,Math.min(900,n)),position=elapsed===null?null:clamp(elapsed)/9;
+ const limits=hasBenchmarks?[clamp(best),clamp(Math.max(best,near??best)),clamp(Math.max(best,near??best,average??best)),900]:[];
+ const bands=hasBenchmarks?limits.map((end,i)=>`<i class="pace-band ${['best','near','average','slower'][i]}" style="width:${Math.max(0,end-(limits[i-1]||0))/9}%"></i>`).join(''):'';
+ const outcome=active?active.status==='awaiting-result'?'Awaiting saved result':!ready?'Tracking unavailable':'Fight in progress':({victory:'Victory confirmed',death:'Death recorded',interrupted:'Interrupted',unconfirmed:'Outcome unconfirmed'}[last.outcome]||'Last observed attempt');
+ const title=active?'Observed boss attempt':'Last observed attempt',number=Number.isInteger(attempt.attemptNumber)&&attempt.attemptNumber>0?` #${attempt.attemptNumber}`:'';
+ const confidence=Number.isInteger(attempt.bossId)?'':'Arena unconfirmed · separate attempts and benchmarks unavailable.';
+ const detail=!isConnected?'Connection lost; live timing is unavailable.':typeof tracked.notice==='string'?tracked.notice:'';
+ const scope=typeof b.scope==='string'?b.scope:'Personal history for the same journey';
+ const benchmarkNote=hasBenchmarks?`${samples} confirmed ${samples===1?'victory':'victories'} · ${scope}`:'Complete this boss to build personal benchmarks.';
+ const aria=elapsed===null?'Boss attempt timing unavailable':`${fightTime(elapsed)} elapsed on a zero to fifteen minute scale${elapsed>900?'; over fifteen minutes':''}`;
+ return `<section class="attempt-panel" aria-label="Observed boss attempt"><div class="attempt-heading"><div><div class="eyebrow">${title}${number}</div><div class="attempt-name">${esc(attempt.name)}</div></div><b class="attempt-clock${elapsed===null?' unavailable':''}">${elapsed===null?'—':fightTime(elapsed)}</b></div>
+  <div class="attempt-result ${active?'':esc(last.outcome||'')}">${outcome}</div>
+  <div class="pace-track" role="progressbar" aria-label="Boss fight duration" aria-valuemin="0" aria-valuemax="900"${elapsed===null?'':` aria-valuenow="${clamp(elapsed)}"`} aria-valuetext="${esc(aria)}"><div class="pace-bands">${bands}</div>${position===null?'':`<i class="pace-marker" style="--pace-position:${position}%"></i>`}</div>
+  <div class="pace-axis"><span>0 min</span><span${elapsed>900?' class="overflow"':''}>${elapsed>900?'15 min+':'15 min'}</span></div>
+  <div class="pace-legend"><span class="best" title="Fastest confirmed personal victory">Best target<b>${best===null?'—':fightTime(best)}</b></span><span class="near" title="Average of the fastest quartile of confirmed victories, including the fastest result">Near best avg<b>${near===null?'—':fightTime(near)}</b></span><span class="average" title="Average of all confirmed victories">Average<b>${average===null?'—':fightTime(average)}</b></span></div>
+  ${inlineInfo(`<p>${esc(benchmarkNote)}${confidence?' '+esc(confidence):''}</p>${detail?`<p>${esc(detail)}</p>`:''}<p>Green marks the fastest confirmed time, yellow the fastest quartile average, orange the overall average, and red the remaining fifteen-minute scale. These are personal boss-fight targets. The clock continues beyond that scale.</p>`,'attempt')}</section>`;
+}
+function renderBossAttempts(s,isConnected=true){
+ const markup=bossAttemptMarkup(s,isConnected),view=viewName(s);
+ for(const [kind,id] of [['home','homeAttempt'],['combat','combatAttempt'],['speedrun','speedrunAttempt']]){
+  const element=document.getElementById(id);element.hidden=kind!==view||!markup;
+  if(attemptRenderKeys[id]!==markup){attemptRenderKeys[id]=markup;element.innerHTML=markup}
+ }
+}
+function renderCombatMetrics(s,isConnected=true){
+ const m=s.combatMetrics||{},available=isConnected&&saveReady(s),known=available&&Number.isFinite(m.observedSeconds);
+ document.getElementById('combatBoss').textContent=m.bossName||(s.current?.source==='Live game data'?s.current.name:'Waiting for a live fight');
+ for(const key of ['rollingDps','averageDps','observedDamage','largestDrop'])document.getElementById(key).textContent=available?metricNumber(m[key]):'—';
+ document.getElementById('observedSeconds').textContent=known?fightTime(m.observedSeconds):'—';
+ document.getElementById('combatHealth').textContent=available&&Number.isFinite(m.hpPercent)?`Boss health remaining · ${Math.max(0,Math.min(100,m.hpPercent)).toFixed(1)}%`:'';
+ const note=!isConnected?'Connection lost. Live measurements are unavailable.':!saveReady(s)?'Connect a valid character save to measure damage.':m.status==='tracking'?'':'Enable live tracking and enter a boss fight to measure damage. Manual fight previews do not supply DPS.';
+ const noteElement=document.getElementById('combatNote');noteElement.textContent=note;noteElement.hidden=!note;
+}
+function recordCheckedLabel(value){
+ if(typeof value!=='string'||!Number.isFinite(Date.parse(value)))return 'Not checked yet';
+ return new Date(value).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+}
+function publishedRecordMarkup(s,isConnected=true){
+ const p=s.publishedRecord,run=s.speedrun||{},categoryId=run.runPolicy?.categoryId||s.runPolicy?.selectedId;
+ if(!p||p.source!=='speedrun.com'||typeof categoryId!=='string'||!categoryId||p.categoryId!==categoryId||!['fresh','stale','unavailable','unsupported'].includes(p.status))return '';
+ const journey=run.journey??(['idle','armed','waiting'].includes(run.status||'idle')?s.stats?.journey:null);
+ if(journey!==1)return '';
+ if(p.simulation===true&&s.simulation!==true)return '';
+ const simulated=s.simulation===true&&p.simulation===true,compatible=p.timingKey==='pc-soulsplitter-game-time';
+ const validTime=value=>Number.isFinite(value)&&value>0&&value<1e9?value:null;
+ const samples=Number.isInteger(p.sampleCount)&&p.sampleCount>0&&p.sampleCount<=1000000?p.sampleCount:0;
+ const usable=compatible&&['fresh','stale'].includes(p.status)&&samples>0&&validTime(p.bestSeconds)!==null;
+ const stale=p.status==='stale'||!isConnected;
+ const state=simulated?'simulation':usable?stale?'stale':'fresh':'unavailable';
+ const status=simulated?'Simulated':usable?stale?'Cached':'Current snapshot':p.status==='unsupported'?'Not available':'Unavailable';
+ const best=usable?validTime(p.bestSeconds):null;
+ const near=usable&&validTime(p.nearBestSeconds)!==null?Math.max(best,p.nearBestSeconds):null;
+ const average=usable&&validTime(p.averageSeconds)!==null?Math.max(best,near??best,p.averageSeconds):null;
+ const scale=usable?Math.max(60,Math.ceil(Math.max(best,near??best,average??best)*1.15/60)*60):null;
+ const elapsed=isConnected&&run.timingSource==='livesplit'&&run.recordMatchesTimer!==false&&['running','paused','finished','interrupted'].includes(run.status)?attemptSeconds(run.elapsedSeconds):null;
+ const clamp=value=>Math.max(0,Math.min(scale,value));
+ const limits=usable?[best,near??best,average??near??best,scale].map(clamp):[];
+ const bands=limits.map((end,i)=>`<i class="pace-band ${['best','near','average','slower'][i]}" style="width:${Math.max(0,end-(limits[i-1]||0))/scale*100}%"></i>`).join('');
+ const sourceUrl=typeof p.sourceUrl==='string'&&/^https:\/\/(?:www\.)?speedrun\.com(?:\/[^\s<>"\\]*)?$/.test(p.sourceUrl)?p.sourceUrl:null;
+ const source=simulated?'Simulated record data':sourceUrl?`<a href="${esc(sourceUrl)}" target="_blank" rel="noopener noreferrer">speedrun.com</a>`:'speedrun.com';
+ const checked=recordCheckedLabel(p.checkedAt),sampleText=`${samples} published ${samples===1?'run':'runs'} in this snapshot`;
+ const details=[`<p>${source} · ${simulated?'example checked':'last successful check'} ${esc(checked)}.</p>`,
+  `<p>${esc(p.categoryName||'Selected category')}${typeof p.scope==='string'&&p.scope?' · '+esc(p.scope):''}. ${esc(p.timing||'Published PC category time')}. Only Journey 1 is compared with these fresh-save records.</p>`];
+ if(usable)details.push(`<p>${esc(sampleText)}. Green marks the best accepted time, yellow the near-best average, orange the sampled average, then red. This full-run scale adapts to the category; it is separate from the personal boss-fight bar.</p>`);
+ if(stale&&!simulated)details.push('<p>Showing a cached snapshot. The current leaderboard could have changed; an automatic refresh will check again.</p>');
+ if(!compatible)details.push('<p>Published timing is not comparable with the current game-time clock.</p>');
+ if(typeof p.notice==='string'&&p.notice)details.push(`<p>${esc(p.notice)}</p>`);
+ if(p.lastAttemptAt&&p.lastAttemptAt!==p.checkedAt)details.push(`<p>Last refresh attempt: ${esc(recordCheckedLabel(p.lastAttemptAt))}.</p>`);
+ if(p.nextRefreshAt)details.push(`<p>Next refresh check: ${esc(recordCheckedLabel(p.nextRefreshAt))}.</p>`);
+ details.push('<p>An unfinished run being below a final record time does not mean it is ahead. Published full-run times do not supply individual boss-fight targets.</p>');
+ const track=usable?`<div class="pace-track" role="progressbar" aria-label="Full run time against published category times" aria-valuemin="0" aria-valuemax="${scale}"${elapsed===null?'':` aria-valuenow="${clamp(elapsed)}"`} aria-valuetext="${esc(elapsed===null?'Run timing unavailable':fmt(elapsed)+' elapsed; full category time comparison, not a split delta')}"><div class="pace-bands">${bands}</div>${elapsed===null?'':`<i class="pace-marker" style="--pace-position:${clamp(elapsed)/scale*100}%"></i>`}</div>
+  <div class="pace-axis"><span>Full run · 0:00</span><span${elapsed>scale?' class="overflow"':''}>${fmt(scale)}${elapsed>scale?'+':''}</span></div>
+  <div class="pace-legend"><span class="best">Best target<b>${fmt(best)}</b></span><span class="near">Near best avg<b>${near===null?'—':fmt(near)}</b></span><span class="average">Average<b>${average===null?'—':fmt(average)}</b></span></div>`:'<div class="record-note">No comparable published times available.</div>';
+ return `<section class="published-record" aria-label="Published category time comparison"><div class="record-heading"><strong>Published category times</strong><span class="record-status" data-state="${state}">${status}</span></div>${track}${simulated?'<div class="record-note">Simulated record data</div>':''}${inlineInfo(details.join(''),'published-record')}</section>`;
+}
+let publishedRenderKey='';
+function renderPublishedRecord(s,isConnected=true){
+ const markup=publishedRecordMarkup(s,isConnected),element=document.getElementById('publishedRecord');
+ element.hidden=!markup;
+ if(markup!==publishedRenderKey){publishedRenderKey=markup;element.innerHTML=markup;}
+}
+function renderSpeedrun(s,isConnected=true){
+ const run=s.speedrun||{},status=run.status||'idle',view=viewName(s),started=!!run.startedAt||['running','paused','finished','interrupted'].includes(status);
+ document.getElementById('runCharacter').textContent=s.showCharacterName?(run.character||s.stats?.name||'New run'):'Speedrun';
+ const category=run.declaredCategory||s.runPolicy?.categoryName||s.runPolicy?.name||run.category||'';
+ document.getElementById('runCategory').textContent=category||'Choose a category';
+ const edit=document.getElementById('editCategoryButton');edit.textContent=category?'Edit category':'Choose category';edit.disabled=actionPending||!isConnected;
+ const audit=document.getElementById('runAudit');audit.textContent=run.localAuditStatus==='ineligible'?'Recording blocked':run.localAuditStatus==='review-required'?'Needs review':'';audit.hidden=!audit.textContent;
+ const label=captureLabel(run,view,isConnected),badge=document.getElementById('runStatus');badge.textContent=label;badge.setAttribute('data-status',label.toLowerCase().replaceAll(' ','-'));
+ document.getElementById('runTimingLabel').textContent='LiveSplit game time';
+ document.getElementById('runTime').textContent=!isConnected||status==='disconnected'||!Number.isFinite(run.elapsedSeconds)?'—':fmt(run.elapsedSeconds);
+ renderPublishedRecord(s,isConnected);
+ document.getElementById('runTimingNote').textContent='Controlled by LiveSplit and SoulSplitter. Boss attempt times are observed separately.';
+ document.getElementById('runIgt').textContent=Number.isFinite(run.igtSeconds)?fmt(run.igtSeconds):'—';
+ document.getElementById('runBosses').textContent=started?metricNumber(run.bossesDefeated):'0';
+ document.getElementById('runDeaths').textContent=started?metricNumber(run.deaths):'0';
+ document.getElementById('runJourney').textContent=run.journey||s.stats?.journey||'—';
+ document.getElementById('exportRunButton').disabled=exportPending||run.exportAvailable!==true||!isConnected||view!=='speedrun';
+ document.getElementById('exportRunButton').setAttribute('aria-busy',String(exportPending));
+ const splits=Array.isArray(run.splits)?run.splits:[],key=JSON.stringify(splits);
+ if(key!==splitRenderKey){
+  splitRenderKey=key;const list=document.getElementById('runSplits');list.className=splits.length?'':'splits-empty';
+  list.innerHTML=splits.length?splits.slice(-5).map(split=>`<div class="split-row"><span>${esc(split.name||'Boss')}</span><time>${Number.isFinite(split.elapsedSeconds)?fmt(split.elapsedSeconds):'—'}</time></div>`).join(''):'No splits yet';
+ }
+ const notice=!isConnected?'Connection lost. Live timing is unavailable.':[run.captureNotice,run.notice,s.runPolicy?.notice].filter(Boolean).join(' ');
+ document.getElementById('runNotice').textContent=notice;
+}
+async function postOverlayAction(payload){
+ if(actionPending)return false;actionPending=true;showActionMessage('');renderViews(lastState||{},connected);
+ try{
+  const options={method:'POST',headers:{'Content-Type':'application/json','X-Tracker-Token':TOKEN},body:JSON.stringify(payload)};
+  if(typeof AbortSignal!=='undefined'&&AbortSignal.timeout)options.signal=AbortSignal.timeout(4000);
+  const response=await fetch('/api/action',options);
+  let result={};try{result=await response.json()}catch{}
+  if(!response.ok||result.error)throw new Error(result.error||'Could not apply this change.');
+  await update();return true;
+ }catch(error){showActionMessage(error.message||'Could not apply this change.',true);return false}
+ finally{actionPending=false;renderViews(lastState||{},connected);fitNativeWindow()}
+}
+async function switchView(kind){
+ if(!['combat','speedrun'].includes(kind)||!connected)return;
+ return postOverlayAction({action:'overlayView',view:viewName(lastState)===kind?'home':kind});
+}
+async function openDashboard(){if(!connected)return false;return postOverlayAction({action:'openDashboard'})}
+async function exportSpeedrun(){
+ if(exportPending||!connected||viewName(lastState)!=='speedrun'||lastState?.speedrun?.exportAvailable!==true)return;
+ exportPending=true;showActionMessage('');renderSpeedrun(lastState,connected);
+ try{
+  if(window.pywebview?.api?.export_speedrun){
+   const result=await window.pywebview.api.export_speedrun();
+   if(result?.error)throw new Error(result.error);
+   if(result?.path)showActionMessage(`Saved: ${result.path}`);
+   else if(!result?.cancelled)throw new Error('The export could not be saved.');
+  }else{
+   const options={cache:'no-store'};if(typeof AbortSignal!=='undefined'&&AbortSignal.timeout)options.signal=AbortSignal.timeout(4000);
+   const response=await fetch('/api/speedrun/export',options);
+   if(!response.ok)throw new Error('The run could not be exported.');
+   const url=URL.createObjectURL(await response.blob()),link=document.createElement('a');
+   link.href=url;link.download='tarnished-speedrun.tlrun';document.body.appendChild(link);link.click();link.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),1000);showActionMessage('Encrypted run exported as a .tlrun file.');
+  }
+ }catch(error){showActionMessage(error.message||'The run could not be exported.',true)}
+ finally{exportPending=false;renderSpeedrun(lastState||{},connected);fitNativeWindow()}
+}
+window.overlayNativeClick=(x,y)=>{
+ if(!Number.isFinite(x)||!Number.isFinite(y))return;
+ const target=document.elementFromPoint(x,y)?.closest('button,a');
+ if(target&&!target.disabled&&target.getClientRects().length)target.click();
+};
+function syncNativeRegions(){
+ const api=window.pywebview?.api;if(!api?.set_interactive_regions)return;
+ const regions=Array.from(document.querySelectorAll('button,a')).filter(el=>el.getClientRects().length).map(el=>{const r=el.getBoundingClientRect();return {x:r.left,y:r.top,width:r.width,height:r.height}});
+ const key=JSON.stringify([regions,window.innerWidth,window.innerHeight]);if(key===lastNativeRegions)return;lastNativeRegions=key;
+ api.set_interactive_regions(regions,window.innerWidth,window.innerHeight).catch(()=>{lastNativeRegions=''});
+}
+// Small original vector symbols stay crisp in OBS and the native PNG renderer.
+// Status effects have a dashed tile; they are never described as elemental damage.
+const COMBAT_ICONS={
+ physical:{name:'Physical',category:'damage',color:'#d4cec1',path:'<path d="m5 19 9-9m-7 5 4 4M14 4h6v6l-9 9-6-6z"/>'},
+ standard:{name:'Standard physical',category:'damage',color:'#d4cec1',path:'<path d="M12 3v12m-4-4h8m-4 4-3 5h6z"/><path d="m12 3-3 6h6z"/>'},
+ strike:{name:'Strike',category:'damage',color:'#dbc7a2',path:'<path d="m8 9 9 11M4 7l6-4 6 7-6 4z"/>'},
+ slash:{name:'Slash',category:'damage',color:'#d6d9df',path:'<path d="M20 3C17 13 12 18 4 20l5-6C14 13 17 9 20 3ZM4 16l4 4"/>'},
+ pierce:{name:'Pierce',category:'damage',color:'#d5c6aa',path:'<path d="m4 20 11-11m-6 6 3 3m2-14 6-1-1 6-5-5z"/>'},
+ magic:{name:'Magic',category:'elemental damage',color:'#91c2f5',path:'<path d="m12 2 7 9-7 11-7-11zM5 11h14M12 2v20"/>'},
+ fire:{name:'Fire',category:'elemental damage',color:'#f29861',path:'<path d="M13 2c1 5-4 6-3 10 2 0 3-2 4-3 4 4 6 7 3 11-3 3-8 2-10-1C3 13 8 8 8 8c-1 4 1 5 2 5-2-5 3-7 3-11Z"/>'},
+ lightning:{name:'Lightning',category:'elemental damage',color:'#f0d781',path:'<path d="m14 2-9 12h7l-2 8L20 9h-8z"/>'},
+ holy:{name:'Holy',category:'elemental damage',color:'#f1e3a1',path:'<circle cx="12" cy="12" r="4"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8 3 3M5 19l3-3M16 8l3-3"/>'},
+ bleed:{name:'Hemorrhage (bleed)',category:'status effect',color:'#ef7b77',path:'<path d="M12 2c-2 5-7 8-7 13a7 7 0 0 0 14 0c0-5-5-8-7-13Z"/><path d="M9 14c-1 2 0 4 2 4"/>'},
+ frost:{name:'Frostbite',category:'status effect',color:'#a8e4ed',path:'<path d="M12 2v20M3 7l18 10M3 17 21 7M9 4l3 3 3-3M9 20l3-3 3 3M3 10l4-1-1-4M18 19l-1-4 4-1M3 14l4 1-1 4M18 5l-1 4 4 1"/>'},
+ poison:{name:'Poison',category:'status effect',color:'#b3cd83',path:'<circle cx="8" cy="8" r="4"/><circle cx="16" cy="8" r="3"/><path d="M5 13h14c0 5-3 8-7 8s-7-3-7-8Z"/><path d="M9 16h.01M15 16h.01"/>'},
+ scarletRot:{name:'Scarlet rot',category:'status effect',color:'#e99484',path:'<path d="M12 4C2-1 2 9 8 11c-9 4-3 13 3 7 2 9 12 3 7-3 9-2 3-12-3-7 3-8-5-8-3-4Z"/><circle cx="12" cy="12" r="2"/>'},
+ sleep:{name:'Sleep',category:'status effect',color:'#c5acec',path:'<path d="M18 4A8 8 0 1 0 20 17 8 8 0 0 1 18 4Z"/><path d="M12 7h4l-4 4h4"/>'},
+ madness:{name:'Madness',category:'status effect',color:'#f1b74f',path:'<path d="M12 2c-4 5-5 6-5 9-2 0-3-2-3-2-2 7 1 12 8 13 7-1 10-6 8-13 0 0-1 2-3 2 0-3-1-4-5-9Z"/><path d="m7 15 5-3 5 3-5 3z"/>'},
+ deathBlight:{name:'Death blight',category:'status effect',color:'#c1b58a',path:'<path d="M7 17V9a5 5 0 0 1 10 0v8l-3 1v3h-4v-3zM3 4l4 4M21 4l-4 4M3 13l4-1m14 1-4-1"/><path d="M9 11h.01M15 11h.01M11 15h2"/>'},
+};
+function traitIcon(key,group){
+ if(!Object.hasOwn(COMBAT_ICONS,key))return '';
+ const icon=COMBAT_ICONS[key],label=`${group}: ${icon.name} · ${icon.category}`;
+ return `<span class="combat-icon${icon.category==='status effect'?' status-effect':''}" style="--trait-color:${icon.color}" role="img" aria-label="${esc(label)}" title="${esc(label)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.path}</svg></span>`;
+}
+function traitRow(label,values,emptyLabel,explanation){
+ const known=Array.isArray(values);
+ let keys=known?[...new Set(values.filter(key=>typeof key==='string'&&Object.hasOwn(COMBAT_ICONS,key)&&(COMBAT_ICONS[key].category==='status effect')===(label==='Inflicts')))]:[];
+ const physical=['standard','strike','slash','pierce'];
+ if(physical.every(key=>keys.includes(key)))keys=['physical',...keys.filter(key=>!physical.includes(key)&&key!=='physical')];
+ const content=keys.length?keys.map(key=>traitIcon(key,label)).join(''):`<span class="trait-empty">${known&&values.length===0?emptyLabel:'Unverified'}</span>`;
+ return `<div class="trait-row"><span class="trait-label" title="${esc(explanation)}">${label}</span><div class="trait-icons">${content}</div></div>`;
+}
+function combatMarkup(combat){
+ if(!combat||combat.status==='unknown'||!['deals','weakTo','inflicts'].some(key=>Array.isArray(combat[key])))return '<span class="traits-unverified">Combat details unverified</span>';
+ const note=typeof combat.note==='string'?combat.note.trim():'';
+ const phase=typeof combat.phaseLabel==='string'?combat.phaseLabel.trim():'';
+ return traitRow('Deals',combat.deals,'Not listed','Physical and elemental damage used by this encounter.')+
+  (Array.isArray(combat.inflicts)&&combat.inflicts.length?traitRow('Inflicts',combat.inflicts,'None listed','Status effects this boss can inflict. These are not elemental damage.'):'')+
+  traitRow('Weak to',combat.weakTo,'No clear weakness','Lowest damage negation: a relative weakness, not a guarantee of bonus damage.')+
+  (phase?`<div class="trait-phase">${esc(phase)}</div>`:'')+
+  (note?inlineInfo(`<p>${esc(note)}</p>`,'traits'):'');
+}
+let fightKey='',lineupKey='',speedrunLineupKey='',combatRenderKey='',requestedNativeWidth=360,lastNativeSize='',fitPending=false;
+let lastState=null,connected=false,updating=false,animationActive=false,lastNativeAnimation=null;
+const motionPreference=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):{matches:false};
+function renderEncounter(s,isConnected=true){
+ const c=s.current,st=s.stats,main=document.getElementById('main'),ready=saveReady(s);
+ const key=c?`${c.id||c.name}:${c.name}:${c.portrait||''}`:'idle';
+ main.className=`main ${c?'in-fight':'idle'}${c&&!c.portrait?' no-portrait':''}`;
+ if(key!==fightKey){
+  fightKey=key;combatRenderKey='';
+  main.innerHTML=c?`${c.portrait?`<div class="portrait-frame"><img class="portrait" src="${esc(c.portrait)}" alt="${esc(c.name)}"></div>`:''}
+   <div class="maintext"><div class="eyebrow" id="fightLabel"></div><div class="value">${esc(c.name)}</div>
+    <div class="health" id="health"><div class="health-heading"><span>BOSS HP</span><strong id="hpPercent">—</strong></div>
+     <div class="health-track" id="hpTrack" role="progressbar" aria-label="Boss health" aria-valuemin="0" aria-valuemax="100"><i class="health-fill" id="hpFill"></i></div>
+     <div class="health-note" id="hpNote"></div>
+    </div>
+    <div class="combat-traits" id="combatTraits" role="group" aria-label="Boss damage types and weaknesses"></div>
+   </div>
+   <div class="fight-metrics">
+    <div class="metric timer"><small>Fight time</small><b id="fightTime"></b></div>
+    <div class="metric"><small>Level</small><b id="fightLevel"></b></div>
+    <div class="metric runes"><small>Runes held</small><b id="fightRunes"></b></div>
+   </div>`:'<div class="maintext"><div class="eyebrow">Character stats</div><div class="value" id="idleLevel"></div><div class="details" id="idleDetails"></div></div>';
+ }
+ if(c){
+  document.getElementById('fightLabel').textContent=!isConnected?'Last fight':c.source!=='Live game data'?'Manual fight':ready?'Fighting now':'Last fight';
+  const seconds=currentFightSeconds(s);
+  document.getElementById('fightTime').textContent=isConnected&&ready&&seconds!==null?fightTime(seconds):'—';
+  document.getElementById('fightLevel').textContent=st?st.level:'—';
+  document.getElementById('fightRunes').textContent=st?(st.runes||0).toLocaleString():'—';
+  const hp=isConnected&&ready&&c.source==='Live game data'?bossHealth(c):null,track=document.getElementById('hpTrack');
+  document.getElementById('health').classList.toggle('unavailable',!hp);
+  document.getElementById('hpFill').style.width=`${hp?hp.percent:0}%`;
+  document.getElementById('hpPercent').textContent=hp?`${Math.ceil(hp.percent)}%`:'—';
+  document.getElementById('hpNote').textContent=hp?`${hp.hp.toLocaleString()} / ${hp.max.toLocaleString()} HP`:!isConnected?'Live connection lost':!ready?'Waiting for valid save data':c.source==='Live game data'?'Live HP unavailable':'Manual fight · live HP unavailable';
+  if(hp){track.setAttribute('aria-valuenow',String(hp.percent));track.setAttribute('aria-valuetext',`${Math.ceil(hp.percent)}% health remaining`)}
+  else{track.removeAttribute('aria-valuenow');track.setAttribute('aria-valuetext','Health unavailable')}
+  const traits=document.getElementById('combatTraits'),show=s.layout?.showBossTraits!==false,traitsKey=JSON.stringify([show,c.combat||null]);
+  traits.hidden=!show;
+  if(traitsKey!==combatRenderKey){combatRenderKey=traitsKey;traits.innerHTML=show?combatMarkup(c.combat):''}
+ }else{
+  document.getElementById('idleLevel').textContent=st?`Level ${st.level} · ${st.origin}`:'Waiting for character';
+  document.getElementById('idleDetails').innerHTML=st?`${(st.runes||0).toLocaleString()} runes<br>Character playtime ${fmt(st.seconds)}`:'Connect a save file to show character stats';
+ }
+}
+function syncNativeAnimation(){
+ const api=window.pywebview?.api;
+ if(!api?.set_animation_active||lastNativeAnimation===animationActive)return;
+ lastNativeAnimation=animationActive;
+ api.set_animation_active(animationActive).catch(()=>{lastNativeAnimation=null});
+}
+function updateAnimation(){
+ animationActive=viewName(lastState)==='home'&&connected&&saveReady(lastState)&&!!lastState?.current?.portrait&&lastState?.layout?.animateGlow!==false&&!motionPreference.matches;
+ document.querySelector('.card').classList.toggle('animate-glow',animationActive);
+ syncNativeAnimation();
+}
+function renderFreshness(s,isConnected){
+ const status=document.getElementById('sourceStatus'),journey=document.getElementById('journey');
+ journey.textContent=Number.isInteger(s.stats?.journey)&&s.stats.journey>0?`Journey ${s.stats.journey}`:'';
+ const saveStatus=s.saveStatus||((s.ready??!!s.stats)?'connected':'waiting');
+ status.classList.toggle('offline',!isConnected);
+ status.classList.toggle('warning',isConnected&&!saveReady(s));
+ status.title=isConnected?(s.status||'Character statistics update when the game saves.'):'Connection to Tarnished Lineup lost. Showing the last received character data.';
+ if(!isConnected){status.textContent='Disconnected';return}
+ if(saveStatus==='error'){status.textContent='Save issue';return}
+ if(!saveReady(s)){status.textContent='Waiting for save';return}
+ const age=Number.isFinite(s.updated)?Math.max(0,Math.floor(Date.now()/1000-s.updated)):null;
+ status.textContent=age===null?'Save connected':age<10?'Saved just now':age<60?`Saved ${age}s ago`:age<3600?`Saved ${Math.floor(age/60)}m ago`:`Saved ${Math.floor(age/3600)}h ago`;
+}
+function renderState(s){
+  const st=s.stats,l={width:360,opacity:.72,font:'Cinzel',icons:8,...s.layout},card=document.querySelector('.card'),ready=saveReady(s);
+  requestedNativeWidth=l.width;
+  card.style.width=`min(${l.width}px,100vw)`;
+  card.style.setProperty('--boss-size',`${(Math.min(l.width,window.innerWidth)-34)/3}px`);
+  card.style.background=`linear-gradient(145deg,rgba(14,12,11,${l.opacity}),rgba(23,19,16,${Math.max(.2,l.opacity-.04)}))`;
+  document.documentElement.style.setProperty('--overlay-font',l.font==='System'?'Segoe UI':l.font);
+  const nm=document.getElementById('name');nm.textContent=s.showCharacterName&&st?st.name:'';nm.style.display=s.showCharacterName&&st?'block':'none';
+  document.getElementById('bosses').textContent=ready?`${s.catalogKilled}/${s.bosses.length}`:'—';
+  document.getElementById('kills').textContent=ready?(s.enemyKills||0).toLocaleString():'—';
+  document.getElementById('deaths').textContent=st?st.deaths.toLocaleString():'—';
+  renderEncounter(s);
+  const upcoming=ready?(s.upcoming||[]).slice(0,l.icons):[],emptyLabel=ready?'Lineup complete':s.saveStatus==='error'?'Tracking paused':'Waiting for save';
+  const key=JSON.stringify([emptyLabel,upcoming.map(b=>[b.id,b.portrait,b.name,b.dlc])]);
+  if(key!==lineupKey){
+   lineupKey=key;const lineup=document.getElementById('lineup');lineup.classList.toggle('complete',!upcoming.length);
+   lineup.innerHTML=upcoming.length?upcoming.map(b=>`<div class="boss ${b.dlc?'dlc':''}" title="${esc(b.name)}"><img src="${esc(b.portrait)}" alt="${esc(b.name)}"></div>`).join(''):`<span class="empty">${emptyLabel}</span>`;
+  }
+  const categoryUpcoming=ready?(s.speedrun?.upcoming||s.speedrunUpcoming||s.upcoming||[]).slice(0,l.icons):[];
+  const categoryKey=JSON.stringify([ready,categoryUpcoming]);
+  if(categoryKey!==speedrunLineupKey){
+   speedrunLineupKey=categoryKey;const lineup=document.getElementById('speedrunLineup');lineup.classList.toggle('complete',!categoryUpcoming.length);
+   lineup.innerHTML=categoryUpcoming.length?categoryUpcoming.map(b=>`<div class="boss ${b.dlc?'dlc':''}" title="${esc(b.name)}"><img src="${esc(b.portrait)}" alt="${esc(b.name)}"></div>`).join(''):`<span class="empty">${ready?'Lineup complete':'Waiting for save'}</span>`;
+  }
+  lastState=s;connected=true;
+  card.classList.toggle('source-disconnected',false);
+  renderViews(s,true);renderFreshness(s,true);updateAnimation();
+  fitNativeWindow();
+}
+function renderDisconnected(){
+ connected=false;
+ document.querySelector('.card').classList.toggle('source-disconnected',true);
+ if(lastState)renderEncounter(lastState,false);
+ renderViews(lastState||{},false);renderFreshness(lastState||{},false);updateAnimation();fitNativeWindow();
+}
+async function update(){
+ if(updating)return;updating=true;
+ try{
+  const options={cache:'no-store'};
+  if(typeof AbortSignal!=='undefined'&&AbortSignal.timeout)options.signal=AbortSignal.timeout(4000);
+  const response=await fetch('/api/state',options);
+  if(!response.ok)throw new Error('Overlay connection failed');
+  const s=await response.json();
+  if(!s||!Array.isArray(s.bosses))throw new Error('Invalid overlay state');
+  renderState(s);
+ }catch(e){renderDisconnected()}
+ finally{updating=false}
+}
+function fitNativeWindow(){
+ if(fitPending)return;fitPending=true;
+ requestAnimationFrame(()=>{fitPending=false;syncNativeRegions();if(!window.pywebview?.api)return;
+  const height=Math.ceil(document.querySelector('.card').getBoundingClientRect().height),key=`${requestedNativeWidth}:${height}`;
+  if(key===lastNativeSize)return;lastNativeSize=key;
+  window.pywebview.api.resize(requestedNativeWidth,height).catch(()=>{lastNativeSize=''});
+ });
+}
+new ResizeObserver(fitNativeWindow).observe(document.querySelector('.card'));
+window.addEventListener('pywebviewready',()=>{lastNativeRegions='';fitNativeWindow();lastNativeAnimation=null;syncNativeAnimation()});
+window.addEventListener('resize',()=>{lastNativeRegions='';fitNativeWindow()});
+motionPreference.addEventListener?.('change',updateAnimation);
+document.fonts.ready.then(fitNativeWindow);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&window.pywebview?.api)window.pywebview.api.close()});
+setInterval(update,1000);update();
+</script>
+</body>
+</html>

@@ -1,0 +1,1666 @@
+[
+  {
+    "id": 10000800,
+    "name": "Godrick the Grafted",
+    "location": "Stormveil Castle",
+    "region": "Stormveil Castle",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 10000850,
+    "name": "Margit, the Fell Omen",
+    "location": "Stormveil Castle",
+    "region": "Stormveil Castle",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 10010800,
+    "name": "Grafted Scion",
+    "location": "Chapel of Anticipation",
+    "region": "Limgrave",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 11000800,
+    "name": "Morgott, the Omen King",
+    "location": "Leyndell, Royal Capital",
+    "region": "Leyndell, Royal Capital",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 11000850,
+    "name": "Godfrey, First Elden Lord (Golden Shade)",
+    "location": "Leyndell, Royal Capital",
+    "region": "Leyndell, Royal Capital",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 11050800,
+    "name": "Hoarah Loux, Warrior",
+    "location": "Leyndell, Ashen Capital",
+    "region": "Leyndell, Ashen Capital",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 11050850,
+    "name": "Sir Gideon Ofnir, the All-Knowing",
+    "location": "Leyndell, Ashen Capital",
+    "region": "Leyndell, Ashen Capital",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12010800,
+    "name": "Dragonkin Soldier of Nokstella",
+    "location": "Ainsel River",
+    "region": "Ainsel River",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12010850,
+    "name": "Dragonkin Soldier",
+    "location": "Lake of Rot",
+    "region": "Lake of Rot",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12020800,
+    "name": "Valiant Gargoyles",
+    "location": "Siofra Aqueduct",
+    "region": "Siofra River",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12020830,
+    "name": "Dragonkin Soldier",
+    "location": "Siofra River",
+    "region": "Siofra River",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 12020850,
+    "name": "Mimic Tear",
+    "location": "Nokron, Eternal City",
+    "region": "Nokron, Eternal City",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12030390,
+    "name": "Crucible Knight Siluria",
+    "location": "Deeproot Depths",
+    "region": "Deeproot Depths",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 12030800,
+    "name": "Fia's Champion",
+    "location": "Deeproot Depths",
+    "region": "Deeproot Depths",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12030850,
+    "name": "Lichdragon Fortissax",
+    "location": "Deeproot Depths",
+    "region": "Deeproot Depths",
+    "type": "legend",
+    "dlc": false
+  },
+  {
+    "id": 12040800,
+    "name": "Astel, Naturalborn of the Void",
+    "location": "Grand Cloister",
+    "region": "Lake of Rot",
+    "type": "legend",
+    "dlc": false
+  },
+  {
+    "id": 12050800,
+    "name": "Mohg, Lord of Blood",
+    "location": "Mohgwyn Palace",
+    "region": "Mohgwyn Palace",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 12080800,
+    "name": "Ancestor Spirit",
+    "location": "Hallowhorn Grounds",
+    "region": "Siofra River",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 12090800,
+    "name": "Regal Ancestor Spirit",
+    "location": "Hallowhorn Grounds",
+    "region": "Nokron, Eternal City",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 13000800,
+    "name": "Maliketh, the Black Blade",
+    "location": "Crumbling Farum Azula",
+    "region": "Crumbling Farum Azula",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 13000830,
+    "name": "Dragonlord Placidusax",
+    "location": "Crumbling Farum Azula",
+    "region": "Crumbling Farum Azula",
+    "type": "legend",
+    "dlc": false
+  },
+  {
+    "id": 13000850,
+    "name": "Godskin Duo",
+    "location": "Crumbling Farum Azula",
+    "region": "Crumbling Farum Azula",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 14000800,
+    "name": "Rennala, Queen of the Full Moon",
+    "location": "Academy of Raya Lucaria",
+    "region": "Academy of Raya Lucaria",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 14000850,
+    "name": "Red Wolf of Radagon",
+    "location": "Academy of Raya Lucaria",
+    "region": "Academy of Raya Lucaria",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 15000800,
+    "name": "Malenia, Blade of Miquella",
+    "location": "Miquella's Haligtree",
+    "region": "Miquella's Haligtree",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 15000850,
+    "name": "Loretta, Knight of the Haligtree",
+    "location": "Miquella's Haligtree",
+    "region": "Miquella's Haligtree",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 16000800,
+    "name": "Rykard, Lord of Blasphemy",
+    "location": "Volcano Manor",
+    "region": "Volcano Manor",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 16000850,
+    "name": "Godskin Noble",
+    "location": "Volcano Manor",
+    "region": "Volcano Manor",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 16000860,
+    "name": "Abductor Virgins",
+    "location": "Volcano Manor",
+    "region": "Volcano Manor",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 18000800,
+    "name": "Ulcerated Tree Spirit",
+    "location": "Stranded Graveyard",
+    "region": "Limgrave",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 18000850,
+    "name": "Soldier of Godrick",
+    "location": "Stranded Graveyard",
+    "region": "Limgrave",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 19000800,
+    "name": "Elden Beast",
+    "location": "Elden Throne",
+    "region": "Leyndell, Ashen Capital",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 35000800,
+    "name": "Mohg, the Omen",
+    "location": "Subterranean Shunning-Grounds",
+    "region": "Subterranean Shunning-Grounds",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 35000850,
+    "name": "Esgar, Priest of Blood",
+    "location": "Subterranean Shunning-Grounds",
+    "region": "Subterranean Shunning-Grounds",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 39200800,
+    "name": "Magma Wyrm Makar",
+    "location": "Ruin-Strewn Precipice",
+    "region": "Liurnia of the Lakes",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 30000800,
+    "name": "Cemetery Shade",
+    "location": "Tombsward Catacombs",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30010800,
+    "name": "Erdtree Burial Watchdog",
+    "location": "Impaler's Catacombs",
+    "region": "Weeping Peninsula",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30020800,
+    "name": "Erdtree Burial Watchdog",
+    "location": "Stormfoot Catacombs",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30110800,
+    "name": "Black Knife Assassin",
+    "location": "Deathtouched Catacombs",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30040800,
+    "name": "Grave Warden Duelist",
+    "location": "Murkwater Catacombs",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30050800,
+    "name": "Cemetery Shade",
+    "location": "Black Knife Catacombs",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30050850,
+    "name": "Black Knife Assassin",
+    "location": "Black Knife Catacombs",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30030800,
+    "name": "Spirit-Caller Snail",
+    "location": "Road's End Catacombs",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30060800,
+    "name": "Erdtree Burial Watchdog",
+    "location": "Cliffbottom Catacombs",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30080800,
+    "name": "Ancient Hero of Zamor",
+    "location": "Sainted Hero's Grave",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30100800,
+    "name": "Crucible Knight Ordovis",
+    "location": "Auriza Hero's Grave",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30070800,
+    "name": "Erdtree Burial Watchdog",
+    "location": "Wyndham Catacombs",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30130800,
+    "name": "Grave Warden Duelist",
+    "location": "Auriza Side Tomb",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30090800,
+    "name": "Red Wolf of the Champion",
+    "location": "Gelmir Hero's Grave",
+    "region": "Mt. Gelmir",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30120800,
+    "name": "Misbegotten Warrior & Perfumer Tricia",
+    "location": "Unsightly Catacombs",
+    "region": "Mt. Gelmir",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30140800,
+    "name": "Erdtree Burial Watchdog",
+    "location": "Minor Erdtree Catacombs",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30150800,
+    "name": "Cemetery Shade",
+    "location": "Caelid Catacombs",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30160800,
+    "name": "Putrid Tree Spirit",
+    "location": "War-Dead Catacombs",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30170800,
+    "name": "Ancient Hero of Zamor",
+    "location": "Giant-Conquering Hero's Grave",
+    "region": "Mountaintops of the Giants",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30180800,
+    "name": "Ulcerated Tree Spirit",
+    "location": "Giants' Mountaintop Catacombs",
+    "region": "Mountaintops of the Giants",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30190800,
+    "name": "Putrid Grave Warden Duelist",
+    "location": "Consecrated Snowfield Catacombs",
+    "region": "Consecrated Snowfield",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 30202800,
+    "name": "Stray Mimic Tear",
+    "location": "Hidden Path to the Haligtree",
+    "region": "Consecrated Snowfield",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31000800,
+    "name": "Patches",
+    "location": "Murkwater Cave",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31010800,
+    "name": "Runebear",
+    "location": "Earthbore Cave",
+    "region": "Weeping Peninsula",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31020800,
+    "name": "Miranda the Blighted Bloom",
+    "location": "Tombsward Cave",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31030800,
+    "name": "Beastman of Farum Azula",
+    "location": "Groveside Cave",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31150800,
+    "name": "Demi-Human Chief",
+    "location": "Coastal Cave",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31170800,
+    "name": "Guardian Golem",
+    "location": "Highroad Cave",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31040800,
+    "name": "Cleanrot Knight",
+    "location": "Stillwater Cave",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31050800,
+    "name": "Bloodhound Knight",
+    "location": "Lakeside Crystal Cave",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31060800,
+    "name": "Crystalians",
+    "location": "Academy Crystal Cave",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31070800,
+    "name": "Kindred of Rot",
+    "location": "Seethewater Cave",
+    "region": "Mt. Gelmir",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31090800,
+    "name": "Demi-Human Queen Margot",
+    "location": "Volcano Cave",
+    "region": "Mt. Gelmir",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31180800,
+    "name": "Miranda the Blighted Bloom",
+    "location": "Perfumer's Grotto",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31190800,
+    "name": "Black Knife Assassin",
+    "location": "Sage's Cave",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31190850,
+    "name": "Necromancer Garris",
+    "location": "Sage's Cave",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31210800,
+    "name": "Frenzied Duelist",
+    "location": "Gaol Cave",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31100800,
+    "name": "Beastman of Farum Azula",
+    "location": "Dragonbarrow Cave",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31200800,
+    "name": "Cleanrot Knight",
+    "location": "Abandoned Cave",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31110800,
+    "name": "Putrid Crystalians",
+    "location": "Sellia Hideaway",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31120800,
+    "name": "Misbegotten Crusader",
+    "location": "Cave of the Forlorn",
+    "region": "Mountaintops of the Giants",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 31220800,
+    "name": "Spirit-Caller Snail",
+    "location": "Spiritcaller's Cave",
+    "region": "Mountaintops of the Giants",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32000800,
+    "name": "Scaly Misbegotten",
+    "location": "Morne Tunnel",
+    "region": "Weeping Peninsula",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32010800,
+    "name": "Stonedigger Troll",
+    "location": "Limgrave Tunnels",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32020800,
+    "name": "Crystalian (Ringblade)",
+    "location": "Raya Lucaria Crystal Tunnel",
+    "region": "Liurnia of the Lakes",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32040800,
+    "name": "Stonedigger Troll",
+    "location": "Old Altus Tunnel",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32050800,
+    "name": "Crystalians",
+    "location": "Altus Tunnel",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32070800,
+    "name": "Magma Wyrm",
+    "location": "Gael Tunnel",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32080800,
+    "name": "Fallingstar Beast",
+    "location": "Sellia Crystal Tunnel",
+    "region": "Caelid",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 32110800,
+    "name": "Astel, Stars of Darkness",
+    "location": "Yelough Anix Tunnel",
+    "region": "Consecrated Snowfield",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 34120800,
+    "name": "Onyx Lord",
+    "location": "Divine Tower of West Altus",
+    "region": "Altus Plateau",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 34130800,
+    "name": "Godskin Apostle",
+    "location": "Divine Tower of Caelid",
+    "region": "Caelid",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 34140850,
+    "name": "Fell Twins",
+    "location": "Divine Tower of East Altus",
+    "region": "Altus Plateau",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 1044360800,
+    "name": "Mad Pumpkin Head",
+    "location": "Waypoint Ruins",
+    "region": "Limgrave",
+    "type": "dungeon",
+    "dlc": false
+  },
+  {
+    "id": 1043370800,
+    "name": "Night's Cavalry",
+    "location": "Agheel Lake North",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1042380800,
+    "name": "Death Rite Bird",
+    "location": "Stormgate",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1042380850,
+    "name": "Bell Bearing Hunter",
+    "location": "Warmaster's Shack",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1044350800,
+    "name": "Bloodhound Knight Darriwil",
+    "location": "Forlorn Hound Evergaol",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1042370800,
+    "name": "Crucible Knight",
+    "location": "Stormhill Evergaol",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1042360800,
+    "name": "Tree Sentinel",
+    "location": "Church of Elleh",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1043360800,
+    "name": "Flying Dragon Agheel",
+    "location": "Dragon-Burnt Ruins",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1045390800,
+    "name": "Tibia Mariner",
+    "location": "Summonwater Village",
+    "region": "Limgrave",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1042330800,
+    "name": "Ancient Hero of Zamor",
+    "location": "Weeping Evergaol",
+    "region": "Weeping Peninsula",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1043330800,
+    "name": "Erdtree Avatar",
+    "location": "Minor Erdtree (Weeping Peninsula)",
+    "region": "Weeping Peninsula",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1044320850,
+    "name": "Night's Cavalry",
+    "location": "Castle Morne Approach",
+    "region": "Weeping Peninsula",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1044320800,
+    "name": "Death Rite Bird",
+    "location": "Castle Morne Approach",
+    "region": "Weeping Peninsula",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1043300800,
+    "name": "Leonine Misbegotten",
+    "location": "Castle Morne",
+    "region": "Weeping Peninsula",
+    "type": "boss",
+    "dlc": false
+  },
+  {
+    "id": 1034480800,
+    "name": "Royal Revenant",
+    "location": "Kingsrealm Ruins",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1038410800,
+    "name": "Adan, Thief of Fire",
+    "location": "Malefactor's Evergaol",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1033450800,
+    "name": "Bols, Carian Knight",
+    "location": "Cuckoo's Evergaol",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1036500800,
+    "name": "Onyx Lord",
+    "location": "Royal Grave Evergaol",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1033420800,
+    "name": "Alecto, Black Knife Ringleader",
+    "location": "Moonlight Altar",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1033430800,
+    "name": "Erdtree Avatar",
+    "location": "Revenger's Shack",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1038480800,
+    "name": "Erdtree Avatar",
+    "location": "Minor Erdtree (Liurnia Northeast)",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1035500800,
+    "name": "Royal Knight Loretta",
+    "location": "Carian Manor",
+    "region": "Liurnia of the Lakes",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 1037460800,
+    "name": "Bell Bearing Hunter",
+    "location": "Church of Vows",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1039430800,
+    "name": "Night's Cavalry",
+    "location": "Liurnia Highway Far North",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1036480800,
+    "name": "Night's Cavalry",
+    "location": "East Raya Lucaria Gate",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1037420800,
+    "name": "Death Rite Bird",
+    "location": "Laskyar Ruins",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1036450800,
+    "name": "Death Rite Bird",
+    "location": "Gate Town Northwest",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1034450800,
+    "name": "Glintstone Dragon Smarag",
+    "location": "Meeting Place",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1034420800,
+    "name": "Glintstone Dragon Adula",
+    "location": "Moonfolk Ruins",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1035420800,
+    "name": "Omenkiller",
+    "location": "Village of the Albinaurics",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1039440800,
+    "name": "Tibia Mariner",
+    "location": "Jarburg",
+    "region": "Liurnia of the Lakes",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1037510800,
+    "name": "Ancient Dragon Lansseax",
+    "location": "Abandoned Coffin",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1041520800,
+    "name": "Ancient Dragon Lansseax",
+    "location": "Rampartside Path",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1038510800,
+    "name": "Demi-Human Queen",
+    "location": "Lux Ruins",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1041500800,
+    "name": "Fallingstar Beast",
+    "location": "South of Tree Sentinel Duo",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1040530800,
+    "name": "Sanguine Noble",
+    "location": "Writheblood Ruins",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1041510800,
+    "name": "Tree Sentinel Duo",
+    "location": "Altus Plateau",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1042550800,
+    "name": "Godskin Apostle",
+    "location": "Windmill Heights",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1040520800,
+    "name": "Black Knife Assassin",
+    "location": "Sainted Hero's Grave Entrance",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1045520800,
+    "name": "Draconic Tree Sentinel",
+    "location": "Capital Rampart",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1039500800,
+    "name": "Godefroy the Grafted",
+    "location": "Golden Lineage Evergaol",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1041530800,
+    "name": "Wormface",
+    "location": "Woodfolk Ruins",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1044530800,
+    "name": "Death Rite Bird",
+    "location": "Minor Erdtree (Capital Outskirts)",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1043530800,
+    "name": "Bell Bearing Hunter",
+    "location": "Hermit Merchant's Shack",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1039540800,
+    "name": "Elemer of the Briar",
+    "location": "Shaded Castle",
+    "region": "Altus Plateau",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 1038520800,
+    "name": "Tibia Mariner",
+    "location": "Wyndham Ruins",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1039510800,
+    "name": "Night's Cavalry",
+    "location": "Altus Highway",
+    "region": "Altus Plateau",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1037530800,
+    "name": "Demi-Human Queen",
+    "location": "Primeval Sorcerer Azur",
+    "region": "Mt. Gelmir",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1035530800,
+    "name": "Magma Wyrm",
+    "location": "Seethewater Terminus",
+    "region": "Mt. Gelmir",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1036540800,
+    "name": "Full-Grown Fallingstar Beast",
+    "location": "Crater (Mt. Gelmir)",
+    "region": "Mt. Gelmir",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 1037540810,
+    "name": "Ulcerated Tree Spirit",
+    "location": "Minor Erdtree (Mt. Gelmir)",
+    "region": "Mt. Gelmir",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1047400800,
+    "name": "Putrid Avatar",
+    "location": "Minor Erdtree (Caelid)",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1048370800,
+    "name": "Decaying Ekzykes",
+    "location": "Caelid Highway South",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1049370800,
+    "name": "Night's Cavalry",
+    "location": "Southern Aeonia Swamp Bank",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1049370850,
+    "name": "Death Rite Bird",
+    "location": "Southern Aeonia Swamp Bank",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1049380800,
+    "name": "Commander O'Neil",
+    "location": "East Aeonia Swamp",
+    "region": "Caelid",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 1051360800,
+    "name": "Crucible Knight",
+    "location": "Redmane Castle",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1252380800,
+    "name": "Starscourge Radahn",
+    "location": "Battlefield (Caelid)",
+    "region": "Caelid",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 1049390800,
+    "name": "Nox Priest",
+    "location": "West Sellia",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1048410800,
+    "name": "Bell Bearing Hunter",
+    "location": "Isolated Merchant's Shack (Dragonbarrow)",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1049390850,
+    "name": "Battlemage Hugues",
+    "location": "Sellia Crystal Tunnel Entrance",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1051400800,
+    "name": "Putrid Avatar",
+    "location": "Dragonbarrow Fork",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1052410800,
+    "name": "Flying Dragon Greyll",
+    "location": "Dragonbarrow",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1052410850,
+    "name": "Night's Cavalry",
+    "location": "Dragonbarrow",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1051430800,
+    "name": "Black Blade Kindred",
+    "location": "Bestial Sanctum",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1048400800,
+    "name": "Pumpkin Head Duo",
+    "location": "Caelem Ruins",
+    "region": "Caelid",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1048510800,
+    "name": "Night's Cavalry",
+    "location": "Forbidden Lands",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1049520800,
+    "name": "Black Blade Kindred",
+    "location": "Before Grand Lift of Rold",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1254560800,
+    "name": "Borealis the Freezing Fog",
+    "location": "Freezing Fields",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1053560800,
+    "name": "Roundtable Knight Vyke",
+    "location": "Lord Contender's Evergaol",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1052520800,
+    "name": "Fire Giant",
+    "location": "Giants' Forge",
+    "region": "Mountaintops of the Giants",
+    "type": "remembrance",
+    "dlc": false
+  },
+  {
+    "id": 1052560800,
+    "name": "Erdtree Avatar",
+    "location": "Minor Erdtree (Mountaintops)",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1050570800,
+    "name": "Death Rite Bird",
+    "location": "West of Castle Sol",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1051570800,
+    "name": "Commander Niall",
+    "location": "Castle Sol",
+    "region": "Mountaintops of the Giants",
+    "type": "great",
+    "dlc": false
+  },
+  {
+    "id": 1050560800,
+    "name": "Great Wyrm Theodorix",
+    "location": "Albinauric Rise",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1248550800,
+    "name": "Night's Cavalry",
+    "location": "Southwest Mountaintops",
+    "region": "Mountaintops of the Giants",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1050570850,
+    "name": "Putrid Avatar",
+    "location": "Minor Erdtree (Snowfield)",
+    "region": "Consecrated Snowfield",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 1048570800,
+    "name": "Death Rite Bird",
+    "location": "Ordina, Liturgical Town",
+    "region": "Consecrated Snowfield",
+    "type": "field",
+    "dlc": false
+  },
+  {
+    "id": 2045440800,
+    "name": "Ghostflame Dragon",
+    "location": "Gravesite Plain",
+    "region": "Gravesite Plain",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2046410800,
+    "name": "Blackgaol Knight",
+    "location": "Western Nameless Mausoleum",
+    "region": "Gravesite Plain",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 20000800,
+    "name": "Divine Beast Dancing Lion",
+    "location": "Belurat, Tower Settlement",
+    "region": "Gravesite Plain",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 43000800,
+    "name": "Chief Bloodfiend",
+    "location": "Rivermouth Cave",
+    "region": "Gravesite Plain",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 41020800,
+    "name": "Lamenter",
+    "location": "Lamenter's Gaol",
+    "region": "Gravesite Plain",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 41000800,
+    "name": "Demi-Human Swordmaster Onze",
+    "location": "Belurat Gaol",
+    "region": "Gravesite Plain",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 2048440800,
+    "name": "Rellana, Twin Moon Knight",
+    "location": "Castle Ensis",
+    "region": "Scadu Altus",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 2049430800,
+    "name": "Ghostflame Dragon",
+    "location": "Scadu Altus",
+    "region": "Scadu Altus",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2049450800,
+    "name": "Ralva the Great Red Bear",
+    "location": "Scadu Altus",
+    "region": "Scadu Altus",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2049440800,
+    "name": "Dryleaf Dane",
+    "location": "Moorth Ruins",
+    "region": "Scadu Altus",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2049430850,
+    "name": "Black Knight Edredd",
+    "location": "Fort of Reprimand",
+    "region": "Scadu Altus",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 2047450800,
+    "name": "Black Knight Garrew",
+    "location": "Fog Rift Fort",
+    "region": "Scadu Altus",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 2046450800,
+    "name": "Red Bear",
+    "location": "Northern Nameless Mausoleum",
+    "region": "Scadu Altus",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 2051440800,
+    "name": "Rakshasa",
+    "location": "Eastern Nameless Mausoleum",
+    "region": "Scadu Altus",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 2049480800,
+    "name": "Commander Gaius",
+    "location": "Scaduview",
+    "region": "Scadu Altus",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 2050480800,
+    "name": "Scadutree Avatar",
+    "location": "Scadutree Base",
+    "region": "Scadu Altus",
+    "type": "great",
+    "dlc": true
+  },
+  {
+    "id": 2050470800,
+    "name": "Tree Sentinel",
+    "location": "Hinterland",
+    "region": "Scadu Altus",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2050480860,
+    "name": "Tree Sentinel",
+    "location": "Hinterland Bridge",
+    "region": "Scadu Altus",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2052480800,
+    "name": "Fallingstar Beast",
+    "location": "Fingerstone Hill",
+    "region": "Scadu Altus",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2052430800,
+    "name": "Jori, Elder Inquisitor",
+    "location": "Darklight Catacombs",
+    "region": "Scadu Altus",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 21000850,
+    "name": "Golden Hippopotamus",
+    "location": "Shadow Keep Main Gate",
+    "region": "Shadow Keep",
+    "type": "great",
+    "dlc": true
+  },
+  {
+    "id": 21010800,
+    "name": "Messmer the Impaler",
+    "location": "Messmer's Dark Chamber",
+    "region": "Shadow Keep",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 2044470800,
+    "name": "Rugalea the Great Red Bear",
+    "location": "Rauh Base",
+    "region": "Ancient Ruins of Rauh",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2046460800,
+    "name": "Divine Beast Dancing Lion",
+    "location": "Ancient Ruins of Rauh",
+    "region": "Ancient Ruins of Rauh",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 2044450800,
+    "name": "Romina, Saint of the Bud",
+    "location": "Church of the Bud",
+    "region": "Ancient Ruins of Rauh",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 25000800,
+    "name": "Metyr, Mother of Fingers",
+    "location": "Cathedral of Manus Metyr",
+    "region": "Finger Ruins of Rhia",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 2051450800,
+    "name": "Count Ymir, Mother of Fingers",
+    "location": "Cathedral of Manus Metyr",
+    "region": "Finger Ruins of Rhia",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 40000800,
+    "name": "Death Knight",
+    "location": "Fog Rift Catacombs",
+    "region": "Gravesite Plain",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 40010800,
+    "name": "Death Knight",
+    "location": "Scorpion River Catacombs",
+    "region": "Scadu Altus",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 41010800,
+    "name": "Curseblade Labirith",
+    "location": "Bonny Gaol",
+    "region": "Scadu Altus",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 2048380850,
+    "name": "Ghostflame Dragon",
+    "location": "Cerulean Coast",
+    "region": "Cerulean Coast",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2046380800,
+    "name": "Dancer of Ranah",
+    "location": "Southern Nameless Mausoleum",
+    "region": "Cerulean Coast",
+    "type": "boss",
+    "dlc": true
+  },
+  {
+    "id": 2047390800,
+    "name": "Death Rite Bird",
+    "location": "Charo's Hidden Grave",
+    "region": "Cerulean Coast",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2046400800,
+    "name": "Demi-Human Queen Marigga",
+    "location": "Charo's Hidden Grave",
+    "region": "Cerulean Coast",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 22000800,
+    "name": "Putrescent Knight",
+    "location": "Stone Coffin Fissure",
+    "region": "Stone Coffin Fissure",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 2049410800,
+    "name": "Jagged Peak Drake",
+    "location": "Foot of the Jagged Peak",
+    "region": "Jagged Peak",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2052400800,
+    "name": "Jagged Peak Drake",
+    "location": "Jagged Peak Mountainside",
+    "region": "Jagged Peak",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 43010800,
+    "name": "Ancient Dragon-Man",
+    "location": "Dragon's Pit",
+    "region": "Jagged Peak",
+    "type": "dungeon",
+    "dlc": true
+  },
+  {
+    "id": 2054390850,
+    "name": "Ancient Dragon Senessax",
+    "location": "Jagged Peak Mountainside",
+    "region": "Jagged Peak",
+    "type": "field",
+    "dlc": true
+  },
+  {
+    "id": 2054390800,
+    "name": "Bayle the Dread",
+    "location": "Jagged Peak Summit",
+    "region": "Jagged Peak",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 28000800,
+    "name": "Midra, Lord of Frenzied Flame",
+    "location": "Midra's Manse",
+    "region": "Abyssal Woods",
+    "type": "remembrance",
+    "dlc": true
+  },
+  {
+    "id": 20010800,
+    "name": "Radahn, Consort of Miquella",
+    "location": "Enir-Ilim",
+    "region": "Enir-Ilim",
+    "type": "remembrance",
+    "dlc": true
+  }
+]

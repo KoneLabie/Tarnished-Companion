@@ -1,0 +1,13 @@
+node_modules/
+.tools/
+data/
+private/
+.env
+.env.*
+!.env.example
+config.json
+*.key.json
+recipient-key.json
+recipient-public.json
+*.tlrun
+*.log

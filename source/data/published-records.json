@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "source": "speedrun.com",
+  "checkedMappingsAt": "2026-10-22",
+  "gameId": "nd28z0ed",
+  "platformId": "8gej2n93",
+  "platformName": "PC",
+  "apiTiming": "realtime",
+  "timing": "Published PC category time",
+  "scope": "PC · Glitchless · all accepted versions, routes and FPS patch settings",
+  "categories": {
+    "any-percent-glitchless": {"name": "Any% — Glitchless", "categoryId": "02qr00pk", "variableId": "7891zr5n", "valueId": "qj740p3q"},
+    "all-remembrances-no-dlc-glitchless": {"name": "All Remembrances (No DLC) — Glitchless", "categoryId": "824833gk", "variableId": "0nwp51r8", "valueId": "lr30pgml"},
+    "all-remembrances-glitchless": {"name": "All Remembrances — Glitchless", "categoryId": "jdzzjjrd", "variableId": "r8rrz7r8", "valueId": "12vwdg4q"},
+    "defeat-consort-glitchless": {"name": "Defeat Consort — Glitchless", "categoryId": "jdr4mmn2", "variableId": "38d90pel", "valueId": "lx58pm41"}
+  }
+}

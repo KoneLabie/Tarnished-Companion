@@ -1,0 +1,36 @@
+Code and data
+- Boss event-flag catalog and boss names: Ghostbroker / Elden Ring Progression Tracker, GPL-3.0; adapted from the public repository https://github.com/Ghostbroker/elden-ring-progression-tracker .
+- Save parsing layout: zebbedaja / er-save-parser, MIT; see source/data/save-parser-MIT.txt.
+- Boss event flag block mapping references SoulSplitter. The bundled table is data; project: https://github.com/FrankvdStam/SoulSplitter .
+- Read-only game UI memory layout reference: fromsoftware-rs CSFeManImp / TagHudData, dual MIT OR Apache-2.0. Project: https://github.com/vswarte/fromsoftware-rs .
+- Combat reference: factual damage-negation values from the community ER PvE spreadsheet, App Ver. 1.17.1, https://docs.google.com/spreadsheets/d/1BVwmKqB8pvuyJkSTGYOM2kAJxFMQ0jVsc6aKYz_Upes/edit ; outgoing damage/status facts from Tarnished.app and linked community references. Credit belongs to their maintainers and contributors. Full per-encounter links, retrieval hash, interpretation, and limitations are in source/data/boss-combat-sources.md. Source prose and artwork are not bundled as part of this reference.
+- Combat icons are original project SVG artwork under the project GPL-3.0-or-later license.
+- Saved equipment-name catalog: source/data/equipment-catalog.json is a reduced, modified reference from oisis and contributors / EldenRing-SaveForge, GNU GPL version 3, commit ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5. Upstream: https://github.com/oisis/EldenRing-SaveForge/tree/ee1042d7a5bd933f91e6f8a0162e0e0237a1c4c5 . Modifications made 2026-10-22 reduce tables to names, equipment groups, upgrade bounds and confirmed weapon-family anchors. Pinned input URLs and SHA-256 values are retained in the generated JSON; source/data/build-equipment-catalog.py regenerates it. No artwork is copied from this source. The GPL-3.0 license is included in LICENSE.txt. Full attribution, field references and interpretation are in source/data/equipment-catalog-sources.md.
+- Saved build layout references include ER-Save-Lib UserDataX (https://github.com/ClayAmore/ER-Save-Lib/blob/master/src/save/user_data_x.rs) and SaveForge's equipment reader / weapon identity rules at the pinned commit above. Item names remain the property of their respective owners. Last-saved snapshots do not represent every live equipment change or temporary buff.
+
+Boss portraits
+- Portraits are bundled as local thumbnails for this personal overlay. Sources include the Elden Ring Boss API (https://eldenring.fanapis.com/) and image pages from the community-maintained Elden Ring Wiki (https://eldenring.fandom.com/). Contributors and file details are available on those source pages. Some duplicate or paired encounters reuse a related boss image where a dedicated portrait was unavailable.
+- Elden Ring game imagery and character art are owned by FromSoftware / Bandai Namco. This project is an unofficial fan-made companion and is not affiliated with them.
+
+Font
+- Cinzel by Natanael Gama, bundled from Google Fonts under the SIL Open Font License 1.1. License is included at source/fonts/OFL.txt. Project: https://github.com/NDISCOVER/Cinzel .
+
+Desktop overlay window
+- The included LayeredOverlay presenter is project code under the project GPL-3.0-or-later license. It composites the shared overlay page with per-pixel transparency using Windows UpdateLayeredWindow; the Windows and .NET Framework APIs are system components.
+- pywebview 6.2.1 and its runtime dependencies provide the frameless desktop WebView window. pywebview: BSD 3-Clause (https://github.com/r0x0r/pywebview/blob/master/LICENSE); Python.NET: MIT (https://github.com/pythonnet/pythonnet/blob/master/LICENSE); Bottle: MIT (https://github.com/bottlepy/bottle/blob/master/LICENSE); cffi: MIT-0; pycparser: BSD 3-Clause; proxy_tools: MIT; clr_loader: MIT; typing_extensions: PSF-2.0. WebView2 Runtime is provided by Microsoft and is a system component.
+
+
+Timing protocol references
+- LiveSplit TCP protocol and SoulSplitter Elden Ring setup are referenced by an original read-only local client; neither timer is bundled. https://github.com/LiveSplit/LiveSplit#the-livesplit-server and https://github.com/FrankvdStam/SoulSplitter/wiki/Elden-Ring .
+
+Report integrity
+- cryptography 50.0.2 by the Python Cryptography Authority provides Ed25519 signing/verification, X25519 key agreement, HKDF-SHA256 and AES-GCM encryption; dual Apache-2.0 OR BSD-3-Clause. Copies are included in source/licenses/cryptography-LICENSE.txt, cryptography-APACHE.txt, and cryptography-BSD.txt. Project: https://github.com/pyca/cryptography .
+- The installed Windows cryptography wheel links OpenSSL 4.0.3, Apache-2.0. Its license is included at source/licenses/OpenSSL-4.0.3-LICENSE.txt. Project: https://github.com/openssl/openssl/tree/openssl-4.0.3 . The exact bundled OpenSSL version can vary when rebuilding for another platform.
+
+Optional community verifier / Discord bot
+- The verifier and bot integration in bot/ are original project code under GPL-3.0-or-later. Discord is an external service, not a bundled server. The bot source does not imply an active deployment or an official relationship with Discord or speedrun.com.
+- discord.js 14.27.0, by its contributors including Amish Shah and Noel Buechler, is Apache-2.0. Upstream license: https://github.com/discordjs/discord.js/blob/14.27.0/LICENSE . npm-installed dependencies retain their own licenses and notices.
+- The bot's pinned local Node.js 24.22.1 runtime dependency is distributed through npm to support older hosting-panel launchers. Node.js and its bundled components have their own licenses; upstream license and third-party notices: https://github.com/nodejs/node/blob/v24.22.1/LICENSE . Install the dependency with its notices intact. Node.js is not required to run the packaged Windows overlay.
+
+Public leaderboard references
+- Retrieved leaderboard data is attributed to Speedrun.com and its contributors under the API's stated CC-BY-NC 4.0 data terms, separate from the project's source-code license. No current records are bundled. API terms: https://github.com/speedruncomorg/api/blob/master/README.md . Coverage and source links are in source/data/published-records-sources.md and bot/resources/published-records-sources.md.

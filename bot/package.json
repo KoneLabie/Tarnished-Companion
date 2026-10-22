@@ -1,0 +1,11 @@
+{
+  "name": "tarnished-lineup-verifier",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Encrypted Tarnished Lineup report verifier and Discord submission bot",
+  "main": "index.js",
+  "type": "commonjs",
+  "engines": { "node": ">=18.17.0" },
+  "scripts": { "start": "node index.js", "test": "node --test test/*.test.js", "cli": "node cli.js" },
+  "dependencies": { "discord.js": "14.27.0", "node": "24.22.1" }
+}

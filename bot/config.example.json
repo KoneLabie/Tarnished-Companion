@@ -1,0 +1,8 @@
+{
+  "token": "PASTE_BOT_TOKEN_HERE_ON_THE_HOST_ONLY",
+  "applicationId": "1562709047629586482",
+  "guildId": "1365847559754612807",
+  "recipientKeyFile": "./data/recipient-key.json",
+  "dataDir": "./data",
+  "registerCommandsOnStart": false
+}
