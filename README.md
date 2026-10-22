@@ -1,13 +1,13 @@
-# Tarnished Lineup
+# Tarnished Companion
 
 A standalone Elden Ring progress tracker with a translucent OBS overlay and a personal desktop overlay. It shows the current boss (or character stats when idle), progress, deaths, a manual enemy-kill counter, and an icon-only upcoming boss lineup. Uses local portrait artwork and makes installed expansion encounters available automatically.
 
 ## Quick start
 
-1. On Windows, run `TarnishedLineup.exe` or `Start Tarnished Lineup.bat`. The app uses a sword program icon.
-2. In the dashboard, connect an Elden Ring `.sl2` save file and choose a lineup.
+1. On Windows, run `TarnishedCompanion-Setup.exe`, then open the installed **Tarnished Companion** shortcut. The installer includes automatic offline launch support, shortcuts, an uninstaller, and automatic WebView2 setup when needed. The portable `TarnishedCompanion.exe` also works.
+2. The companion opens the **preview walkthrough** first. It also finds Elden Ring, opens Steam if needed, starts the supported game in offline mode, and opens your personal overlay automatically. Load your character as usual. Saved characters connect automatically, including a first save created after startup. Steam and Elden Ring must already be installed; Steam may ask you to sign in. The walkthrough's **Back to app** link opens settings whenever you need them.
 3. For streaming, add an OBS Browser Source at `http://127.0.0.1:18473/overlay` with a 360 × 1200 canvas to fit the speedrun split list. Unused space is transparent. Use OBS **Interact** to click overlay controls, or use the dashboard.
-4. For personal use, click **Open Personal Overlay**. It opens the same overlay in a frameless, transparent, always-on-top window. Drag it anywhere on screen; press **Alt+F4** to close.
+4. The personal overlay opens automatically with game startup. **Open Personal Overlay** reopens it if closed. It shows the same overlay in a frameless, transparent, always-on-top window. Drag it anywhere on screen; press **Alt+F4** to close.
 5. At the bottom of the dashboard, use **Overlay appearance** to adjust font, width, opacity, icon count, boss combat icons, and the animated red fight frame. The portrait card places counters and encounter details above one compact strip of upcoming boss icons. Reduced-motion preferences disable the pulse.
 6. Use the top-right **sword** for combat statistics or **timer** for speedrun statistics. The active button becomes **Home**. These views stay synchronized between the desktop and OBS; the dashboard also has a view selector. Small, borderless **info** controls reveal setup and reference details.
 
@@ -15,7 +15,7 @@ For a visual tour, open [the local preview walkthrough](http://127.0.0.1:18473/p
 
 No Vortex installation or Twitch login is needed. The save is read locally and is never uploaded. Run reports contain selected observations that you choose to export and submit. Regular enemy kills are not stored by Elden Ring, so that counter is manual. Current boss identification is automatic only: there is no manual boss selector, Set fight or Clear control. Live detection is limited to supported game builds in an offline session with Easy Anti-Cheat absent. Save progress remains available when live detection is unavailable.
 
-The desktop overlay uses Microsoft Edge WebView2 Runtime. Most current Windows installations have it. If the window fails to start, install the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
+The installer checks Microsoft Edge WebView2 Runtime and installs it automatically if missing, using Microsoft's included bootstrapper. That prerequisite installation needs internet. The portable executable expects the Runtime already installed. The startup panel explains any blocked session; an already-running protected game is never stopped or replaced. See [installer and automatic startup details](source/installer/README.md).
 
 ## Installed content and lineup presets
 

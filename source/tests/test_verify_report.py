@@ -21,7 +21,7 @@ class VerifyReportTests(unittest.TestCase):
         self.key = Ed25519PrivateKey.generate()
         self.public = self.key.public_key().public_bytes_raw()
         self.fingerprint = hashlib.sha256(self.public).hexdigest()
-        self.payload = 'TARNISHED LINEUP\nCharacter: Tarnished é\nTime: 00:01:23.456\n'.encode('utf-8')
+        self.payload = 'TARNISHED COMPANION\nCharacter: Tarnished é\nTime: 00:01:23.456\n'.encode('utf-8')
         self.metadata = dict(schemaVersion=1, algorithm='Ed25519',
             publicKey=base64.b64encode(self.public).decode('ascii'), fingerprint=self.fingerprint,
             payloadSha256=hashlib.sha256(self.payload).hexdigest(),
@@ -138,7 +138,7 @@ class VerifyReportTests(unittest.TestCase):
                 self.assertEqual(completed.returncode, expected, completed.stderr)
                 self.assertIn('SIGNATURE VALID', completed.stdout)
                 self.assertIn('not gameplay', completed.stdout)
-        self.path.write_bytes(self.report().replace(b'TARNISHED LINEUP', b'CHANGED REPORT!!', 1))
+        self.path.write_bytes(self.report().replace(b'TARNISHED COMPANION', b'CHANGED REPORT!!', 1))
         completed = subprocess.run([sys.executable, script, str(self.path)], capture_output=True, text=True, timeout=10)
         self.assertEqual(completed.returncode, 1)
         self.assertIn('INVALID REPORT', completed.stderr)

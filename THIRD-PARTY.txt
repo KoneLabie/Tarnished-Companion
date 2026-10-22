@@ -18,6 +18,8 @@ Font
 Desktop overlay window
 - The included LayeredOverlay presenter is project code under the project GPL-3.0-or-later license. It composites the shared overlay page with per-pixel transparency using Windows UpdateLayeredWindow; the Windows and .NET Framework APIs are system components.
 - pywebview 6.2.1 and its runtime dependencies provide the frameless desktop WebView window. pywebview: BSD 3-Clause (https://github.com/r0x0r/pywebview/blob/master/LICENSE); Python.NET: MIT (https://github.com/pythonnet/pythonnet/blob/master/LICENSE); Bottle: MIT (https://github.com/bottlepy/bottle/blob/master/LICENSE); cffi: MIT-0; pycparser: BSD 3-Clause; proxy_tools: MIT; clr_loader: MIT; typing_extensions: PSF-2.0. WebView2 Runtime is provided by Microsoft and is a system component.
+- The installer bundles Microsoft's unmodified, signed WebView2 Evergreen bootstrapper, installing the Runtime only if missing. Microsoft Runtime license terms apply separately. Distribution guidance: https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution . Inno Setup's generated installer uses its upstream distribution terms; its compiler is a build tool, not an installed player prerequisite. https://jrsoftware.org/isinfo.php .
+- Automatic offline startup is original project code following SoulSplitter's documented direct-executable/app-ID method. No third-party anti-cheat toggler, launcher binary or proxy DLL is bundled. https://github.com/FrankvdStam/SoulSplitter/wiki/Elden-Ring .
 
 
 Timing protocol references

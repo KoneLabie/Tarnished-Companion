@@ -1,8 +1,8 @@
 {
-  "name": "tarnished-lineup-verifier",
+  "name": "tarnished-companion-verifier",
   "version": "1.0.0",
   "private": true,
-  "description": "Encrypted Tarnished Lineup report verifier and Discord submission bot",
+  "description": "Encrypted Tarnished Companion report verifier and Discord submission bot",
   "main": "index.js",
   "type": "commonjs",
   "engines": { "node": ">=18.17.0" },

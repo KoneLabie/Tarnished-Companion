@@ -1,8 +1,8 @@
-TARNISHED LINEUP — Elden Ring progress + OBS overlay
+TARNISHED COMPANION — Elden Ring progress + OBS overlay
 
 QUICK START
-1. Double-click TarnishedLineup.exe (or Start Tarnished Lineup.bat). Look for the sword program icon.
-2. It opens a local dashboard in your browser. Choose your Elden Ring .sl2 save if it was not found automatically.
+1. Run TarnishedCompanion-Setup.exe, then open the installed Tarnished Companion shortcut. The installer includes automatic offline launch support and WebView2 setup when needed. The portable TarnishedCompanion.exe also works.
+2. The preview walkthrough opens first. The companion finds Elden Ring, opens Steam if needed, and starts the offline game and your personal overlay automatically. Load your character as usual; its save connects automatically. Steam and Elden Ring must already be installed. Steam may require its normal sign-in. Back to app opens settings whenever needed.
 3. Choose a boss lineup and arrange its order. Available encounters and presets follow detected installed content automatically.
 4. Add an OBS Browser Source using http://127.0.0.1:18473/overlay. Set its canvas to 360 × 1200 to fit speedrun splits. Unused space is transparent. Use OBS Interact to click controls, or use the dashboard.
 5. Keep the tracker running while OBS uses the overlay. At the bottom of the dashboard, open info > Quit app for an intentional shutdown. Closing only the dashboard tab or personal overlay window leaves the tracker running.
@@ -38,7 +38,7 @@ TROUBLESHOOTING
 See THIRD-PARTY.txt for code, data and image attribution. See LICENSE.txt for the GPL-3.0-or-later license.
 
 PERSONAL OVERLAY
-Click Open Personal Overlay in the dashboard to open the same /overlay page in a frameless, transparent, always-on-top desktop window. The window fits the visible panel automatically, including when the lineup gets shorter. Empty space is transparent; text and portraits stay opaque. Drag anywhere on the panel to move it; press Alt+F4 to close. This uses Microsoft Edge WebView2 Runtime, which is included with most current Windows installations. If the window does not appear, update/install the WebView2 Runtime from Microsoft. Borderless or windowed game mode is recommended; exclusive fullscreen may cover desktop overlays.
+The personal overlay opens automatically with game startup. Open Personal Overlay in the dashboard reopens it if closed. It shows the same /overlay page in a frameless, transparent, always-on-top desktop window. The window fits the visible panel automatically, including when the lineup gets shorter. Empty space is transparent; text and portraits stay opaque. Drag anywhere on the panel to move it; press Alt+F4 to close. The installer supplies Microsoft WebView2 setup automatically if needed; that prerequisite needs internet. Borderless or windowed game mode is recommended; exclusive fullscreen may cover desktop overlays. See source/installer/README.md for launch, troubleshooting and build details.
 
 
 INSTALLED CONTENT AND PRESETS

@@ -120,7 +120,7 @@ function normalizeReport(opened) {
 }
 function renderText(report) {
   const b = report.build.final || report.build.initial;
-  const lines = ['TARNISHED LINEUP — VERIFIED REPORT RECEIPT', report.reviewStatus,
+  const lines = ['TARNISHED COMPANION — VERIFIED REPORT RECEIPT', report.reviewStatus,
     `Category: ${report.category.name}`, `Character: ${report.character} | Journey ${report.journey}`,
     `LiveSplit Game Time: ${duration(report.timing.elapsedSeconds)}`, `Real Time: ${duration(report.timing.realTimeSeconds)}`,
     `Observed deaths: ${report.deaths} | Boss defeats: ${report.splits.length} | Boss attempts: ${report.attempts.length}`,

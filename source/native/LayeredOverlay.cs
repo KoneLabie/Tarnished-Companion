@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace TarnishedLineup.Native
+namespace TarnishedCompanion.Native
 {
     public sealed class LayeredOverlay : Form
     {
@@ -37,7 +37,7 @@ namespace TarnishedLineup.Native
         public LayeredOverlay(int x, int y)
         {
             ownerThread = Thread.CurrentThread.ManagedThreadId;
-            Text = "Tarnished Lineup";
+            Text = "Tarnished Companion";
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.Manual;
             ShowInTaskbar = true;

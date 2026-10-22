@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tarnished Lineup — OBS</title><link rel="icon" href="/favicon.ico">
+<title>Tarnished Companion — OBS</title><link rel="icon" href="/favicon.ico">
 <style>
 @font-face{font-family:'Cinzel';src:url('/fonts/Cinzel.ttf') format('truetype');font-display:swap}
 *{box-sizing:border-box}
@@ -458,7 +458,7 @@ function renderFreshness(s,isConnected){
  const saveStatus=s.saveStatus||((s.ready??!!s.stats)?'connected':'waiting');
  status.classList.toggle('offline',!isConnected);
  status.classList.toggle('warning',isConnected&&!saveReady(s));
- status.title=isConnected?(s.status||'Character statistics update when the game saves.'):'Connection to Tarnished Lineup lost. Showing the last received character data.';
+ status.title=isConnected?(s.status||'Character statistics update when the game saves.'):'Connection to Tarnished Companion lost. Showing the last received character data.';
  if(!isConnected){status.textContent='Disconnected';return}
  if(saveStatus==='error'){status.textContent='Save issue';return}
  if(!saveReady(s)){status.textContent='Waiting for save';return}

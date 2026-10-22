@@ -319,7 +319,7 @@ character's saved clock since Start, including any gameplay during those pauses.
             raise ValueError('Start a run before exporting times.')
         # Strip line-control characters from save-derived names in a plain text report.
         clean = lambda value: ' '.join(str(value).split())
-        lines = ['TARNISHED LINEUP — SPEEDRUN RECORD', '',
+        lines = ['TARNISHED COMPANION — SPEEDRUN RECORD', '',
                  f'Exported (UTC): {_utc()}', f'Character: {clean(state["character"])}',
                  f'Journey: {state["journey"]}', f'Status: {state["status"]}',
                  f'Started (UTC): {state["startedAt"]}', f'Finished (UTC): {state["endedAt"] or "Not finished"}',

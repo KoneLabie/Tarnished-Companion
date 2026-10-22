@@ -87,7 +87,7 @@ class WindowsProtector:
         source = self.Blob(len(data), array)
         destination = self.Blob()
         if protect:
-            success = self.crypt.CryptProtectData(ctypes.byref(source), 'Tarnished Lineup signing key',
+            success = self.crypt.CryptProtectData(ctypes.byref(source), 'Tarnished Companion signing key',
                 None, None, None, 1, ctypes.byref(destination))
         else:
             success = self.crypt.CryptUnprotectData(ctypes.byref(source), None,

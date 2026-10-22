@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using TarnishedLineup.Native;
+using TarnishedCompanion.Native;
 
 class NativeInteractionTest
 {

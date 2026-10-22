@@ -457,7 +457,7 @@ class ModeIntegrationTests(unittest.TestCase):
         self.fresh_run()
         self.cycle('Ended', 100)
         with urlopen(Request(url + '/api/speedrun/export', headers=headers)) as response:
-            self.assertEqual(response.headers.get_content_type(), 'application/vnd.tarnished-lineup.run+json')
+            self.assertEqual(response.headers.get_content_type(), 'application/vnd.tarnished-companion.run+json')
             encoded = response.read()
             report = self.decrypt(encoded).payload['reportText']
         self.assertNotIn(b'Test Tarnished', encoded)

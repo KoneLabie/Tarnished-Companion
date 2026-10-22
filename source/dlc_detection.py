@@ -8,8 +8,8 @@ https://store.steampowered.com/app/2778580/
 The local installed appmanifest_1245620.acf (reviewed 2026-10-22) identifies
 InstalledDepots/2778580 with dlcappid 2778580. That installation contains
 Game/DLC.bhd and Game/DLC.bdt. Generic sd_dlc02 archives are NOT DLC evidence.
-This companion does not load Steam DLLs, launch games, contact Steam, or inspect
-accounts/saves. Its result is a lineup preference hint, not authorization.
+This detection module does not load Steam DLLs, launch games, contact Steam, or
+inspect accounts/saves. Its result is a lineup preference hint, not authorization.
 """
 import os
 from pathlib import Path

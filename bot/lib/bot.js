@@ -20,7 +20,7 @@ function attachRegistration(client, events, config, { register = require('../com
         await register(config);
         if (stopped) return;
         registered = true;
-        logger.log('Tarnished Lineup /submit command registered for the configured Discord scope.');
+        logger.log('Tarnished Companion /submit command registered for the configured Discord scope.');
       } catch (error) {
         if (stopped) return;
         const code = Number(error.code), status = Number(error.status);
@@ -133,7 +133,7 @@ async function main({ refreshComparison = null } = {}) {
     operations.add(operation); operation.finally(() => operations.delete(operation));
   });
   client.once(Events.ClientReady, ready => {
-    console.log(`Tarnished Lineup connected to Discord as ${ready.user.tag}.`);
+    console.log(`Tarnished Companion connected to Discord as ${ready.user.tag}.`);
     void refreshRecords();
     recordTimer = setInterval(() => void refreshRecords(), 60000);
     recordTimer.unref();

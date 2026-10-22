@@ -120,7 +120,7 @@ def verify_file(path, trusted_fingerprint=None):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description='Verify exact bytes of a signed Tarnished Lineup report.')
+    parser = argparse.ArgumentParser(description='Verify exact bytes of a signed Tarnished Companion report.')
     parser.add_argument('report', type=Path, help='Signed UTF-8 .txt report')
     parser.add_argument('--trusted-fingerprint', type=normalized_fingerprint,
         help='SHA-256 public-key fingerprint obtained separately before trusting the report')

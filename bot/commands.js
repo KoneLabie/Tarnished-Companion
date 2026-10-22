@@ -1,7 +1,7 @@
 'use strict';
 function commands() {
   const { SlashCommandBuilder } = require('discord.js');
-  return [new SlashCommandBuilder().setName('submit').setDescription('Verify and submit a completed Tarnished Lineup run for review')
+  return [new SlashCommandBuilder().setName('submit').setDescription('Verify and submit a completed Tarnished Companion run for review')
     .setDMPermission(false)
     .addAttachmentOption(option => option.setName('report').setDescription('Encrypted .tlrun export, up to 8 MiB').setRequired(true))
     .toJSON()];

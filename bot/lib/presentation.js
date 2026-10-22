@@ -162,7 +162,7 @@ function renderReport(report, section = 'overview', page = 0, token = 'preview',
   const details = ({ overview, bosses, attempts, build, comparison })[section](report, page);
   const title = SECTIONS.find(([id]) => id === section)[1];
   const fields = details.fields.length ? details.fields : [field('Details', details.empty || 'No details available.')];
-  const embed = { color: GOLD, author: { name: 'TARNISHED LINEUP · RUN REPORT' }, title,
+  const embed = { color: GOLD, author: { name: 'TARNISHED COMPANION · RUN REPORT' }, title,
     description: details.description, fields,
     footer: { text: `Page ${details.page + 1}/${details.pages} · Run ${clean(report.recordId, 32)} · Review required` } };
   // Discord counts text across an entire embed. Long legitimate names and

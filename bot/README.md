@@ -1,4 +1,4 @@
-# Tarnished Lineup Discord verifier
+# Tarnished Companion Discord verifier
 
 This bot accepts encrypted `.tlrun` exports through `/submit report:<attachment>`. It decrypts the file, verifies its Ed25519 signature, checks the signer against an independently enrolled Discord account, rejects incomplete/ineligible/simulation results, and saves a replay-protected receipt. The private reply includes category, time, observed boss splits and attempts, and available character equipment. The JSON attachment includes the saved-loadout timeline.
 

@@ -52,6 +52,15 @@ function accept(snapshot) {sandbox.snapshot = clone(snapshot); run('acceptState(
 
 async function main() {
   accept(fixture);
+  const startingSetup=clone(fixture);startingSetup.setup={status:'steam-required',title:'Opening Steam',notice:'Steam opens automatically.',automaticStart:true,gamePath:'C:/Synthetic/Game',steamRunning:false};
+  accept(startingSetup);
+  assert.equal(element('setupTitle').textContent,'Opening Steam for you');
+  assert.equal(element('launchOffline').hidden,true,'Normal automatic startup needs no launch button');
+  assert.equal(element('locateGame').hidden,true,'A detected installation needs no manual file choice');
+  const protectedSetup=clone(startingSetup);protectedSetup.setup={...startingSetup.setup,status:'protected',eacDetected:true,automaticStart:false};accept(protectedSetup);
+  assert.equal(element('setupSession').textContent,'Protected session detected');
+  assert.equal(element('launchOffline').hidden,true,'A protected session cannot be launched over');
+  accept(fixture);
   assert.match(element('char').textContent, /Journey 1/);
   assert.match(element('route').innerHTML, /Available encounters/);
   assert.match(element('route').innerHTML, /Boss &lt;three&gt;/);

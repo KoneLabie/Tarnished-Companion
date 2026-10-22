@@ -13,6 +13,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 import threading
+from app_paths import default_data_dir
 from urllib.request import urlopen
 
 
@@ -113,13 +114,13 @@ def _run(port, root, owner_closed):
     if owner_closed is not None and owner_closed.is_set():
         return
     import webview
-    try:ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('TarnishedLineup.Overlay')
+    try:ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('TarnishedCompanion.Overlay')
     except (OSError,AttributeError):pass
 
     with urlopen(f'http://127.0.0.1:{port}/api/state', timeout=3) as response:
         state = json.load(response)
     width = max(280, min(600, int(state.get('layout', {}).get('width', 360))))
-    log_dir = Path(os.environ.get('LOCALAPPDATA', str(Path.home()))) / 'TarnishedLineup'
+    log_dir = default_data_dir()
     log_dir.mkdir(parents=True, exist_ok=True)
     logger = logging.getLogger('tarnished.desktop')
     handler = logging.FileHandler(log_dir / 'overlay.log', encoding='utf-8')
@@ -129,7 +130,7 @@ def _run(port, root, owner_closed):
     # This renderer must stay shown to keep WebView2 captures running, but it
     # lives offscreen and is absent from the taskbar. Only the presenter is seen.
     renderer = webview.create_window(
-        'Tarnished Lineup renderer', f'http://127.0.0.1:{port}/overlay',
+        'Tarnished Companion renderer', f'http://127.0.0.1:{port}/overlay',
         width=width, height=560, x=-10000, y=-10000,
         min_size=(200, 100), frameless=True, resizable=False,
         transparent=True, focus=False, easy_drag=False,
@@ -274,7 +275,7 @@ def _run(port, root, owner_closed):
             from System import Action, String
             from System.Threading.Tasks import Task
             from System.Windows.Forms import Timer
-            from TarnishedLineup.Native import LayeredOverlay
+            from TarnishedCompanion.Native import LayeredOverlay
 
             if self.presenter is not None or self.closing:
                 return

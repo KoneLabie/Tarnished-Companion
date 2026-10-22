@@ -54,7 +54,7 @@ function fetchJson(initialUrl) {
     function visit(value, redirects) {
       let url;
       try { url = officialUrl(value); } catch (error) { finish(error); return; }
-      active = https.get(url, { headers: { 'User-Agent': 'TarnishedLineup/1.0', Accept: 'application/json', 'Accept-Encoding': 'identity' } }, response => {
+      active = https.get(url, { headers: { 'User-Agent': 'TarnishedCompanion/1.0', Accept: 'application/json', 'Accept-Encoding': 'identity' } }, response => {
         if (settled) { response.destroy(); return; }
         if ([301, 302, 303, 307, 308].includes(response.statusCode)) {
           response.destroy();

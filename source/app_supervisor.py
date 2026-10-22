@@ -27,7 +27,7 @@ def existing_instance(port):
     """Check only the loopback app endpoint; an occupied unrelated port is false."""
     try:
         with urlopen(f'http://127.0.0.1:{port}/health', timeout=.5) as response:
-            return json.loads(response.read(4096)).get('app') == 'TarnishedLineup'
+            return json.loads(response.read(4096)).get('app') in ('TarnishedCompanion','TarnishedLineup')
     except (OSError, ValueError, TypeError, AttributeError):
         return False
 

@@ -449,7 +449,7 @@ class ExternalRun:
     def _export_record(self, r):
         clean = lambda value: ' '.join(str(value).split())
         policy = r.get('runPolicy') or {}
-        lines = ['TARNISHED LINEUP — EXTERNAL TIMER OBSERVATION', '',
+        lines = ['TARNISHED COMPANION — EXTERNAL TIMER OBSERVATION', '',
             f'Exported UTC: {utc()}', 'Timing source: LiveSplit Game Time output (source initialization unverified)',
             f'Category: {clean(r.get("category"))}', f'Character: {clean(r.get("character"))}', f'Journey: {r.get("journey")}',
             'LiveSplit category metadata: ' + clean(json.dumps(r.get('categoryVariables'), ensure_ascii=False, sort_keys=True)),

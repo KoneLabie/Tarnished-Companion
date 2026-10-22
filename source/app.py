@@ -1,4 +1,4 @@
-"""Tarnished Lineup — local Windows companion and OBS browser source.
+"""Tarnished Companion — local Windows companion and OBS browser source.
 Copyright 2026. GPL-3.0-or-later. See ../LICENSE.txt and ../THIRD-PARTY.txt.
 """
 import argparse
@@ -37,6 +37,8 @@ from external_run import utc
 from dlc_detection import detect_dlc
 from lineup_presets import build_presets
 from published_records import PublishedRecords
+from offline_launch import OfflineLauncher, request_existing_play, prepare_installed_game
+from app_paths import default_data_dir
 
 ROOT=Path(getattr(sys,'_MEIPASS',Path(__file__).parent))
 BOSSES=json.loads((ROOT/'data/bosses.json').read_text(encoding='utf-8'))
@@ -63,7 +65,12 @@ PRESETS={'Major bosses + DLC':list(dict.fromkeys(MAJOR+DLC)), 'DLC main route':D
 
 def discover_saves():
     base=Path(os.environ.get('APPDATA',''))/'EldenRing'
-    return [str(p) for p in base.glob('*/*') if p.name.lower() in ('er0000.sl2','er0000.co2')]
+    candidates=[]
+    for path in base.glob('*/*'):
+        if path.name.lower() in ('er0000.sl2','er0000.co2'):
+            try:candidates.append((path.suffix.lower()=='.sl2',path.stat().st_mtime_ns,str(path)))
+            except OSError:pass
+    return [item[2] for item in sorted(candidates,reverse=True)]
 
 def match_boss(name,route,killed):
     # Queue order is a viewing preference, never evidence of the current arena.
@@ -143,6 +150,7 @@ class Tracker:
         self.recovery_requested=bool(recover_interrupted)
         self.shutdown_reason='unexpected'
         self.overlay_restart_times=[]
+        self.launcher=OfflineLauncher(self.dir,PROFILE,process_list,installation=self.dlc,cancelled=self.stop.is_set)
     def capture_enabled(self):
         return self.cfg.get('overlayView')=='speedrun'
     def close_personal_overlay(self):
@@ -192,7 +200,13 @@ class Tracker:
             path=self.cfg['save'];slot=self.cfg['slot'];requested_slot=slot;generation=self.save_generation
             previous=self.profile_snapshot if self.profile_snapshot_path==path else None
         if not path:
-            with self.lock:self.status='Choose an Elden Ring PC save (.sl2 or .co2).';self.save_status='waiting'
+            discovered=discover_saves()
+            with self.lock:
+                if discovered and not self.cfg['save']:
+                    self.cfg['save']=discovered[0];self.persist()
+                    self.status='Character save found automatically. Connecting…'
+                else:self.status='Waiting for Elden Ring to create your character save. Load or create a character in game.'
+                self.save_status='waiting'
             return
         try:
             st=Path(path).stat();sig=(path,slot,st.st_mtime_ns,st.st_size)
@@ -306,6 +320,15 @@ class Tracker:
         if self.capture_enabled() and record.get('status') in ('running','paused','finished'):
             return record.get('runPolicy',{}).get('categoryId')
         return (policy or self.available_run_policy()).get('selectedId')
+    def setup_worker(self):
+        while not self.stop.is_set():
+            self.launcher.refresh()
+            if self.launcher.automatic_tick(lambda:os.startfile('steam://open/main')):
+                with self.lock:
+                    self.live_enabled=True;self.cfg['liveDetection']=True;self.persist()
+                try:self.action({'action':'personalOverlay'})
+                except Exception:logging.warning('The game started but the desktop overlay could not be opened. Use Open Personal Overlay in the dashboard.')
+            self.stop.wait(1)
     def published_worker(self):
         """Public reference refreshes never hold the game/timing lock during I/O."""
         while not self.stop.is_set():
@@ -445,6 +468,7 @@ class Tracker:
                 characterSelectionSource=self.character_selection_source,characterSelectionStatus=self.character_selection_status,
                 status=self.status,saveStatus=self.save_status,contextKey=self.context,trackingNotice=self.tracking_notice,
                 updated=self.updated,liveEnabled=self.live_enabled,liveStatus=self.live_status,
+                setup=self.launcher.snapshot(),
                 liveCharacterVerified=False,
                 current=current,otherBars=self.bars[1:] if self.live_enabled else [],
                 fightSeconds=int(time.monotonic()-self.fight_since) if self.fight_since and current else 0,
@@ -461,6 +485,32 @@ class Tracker:
                 layout=self.cfg.get('layout',{'width':360,'opacity':0.72,'font':'Cinzel','icons':8}),
                 saves=discover_saves(),ready=self.stats is not None and self.save_status=='connected',liveVersion=PROFILE['version'])
     def action(self,payload):
+        # Game startup/file dialogs must not hold the timing or integrity lock.
+        if isinstance(payload,dict) and payload.get('action') in ('requestPlay','launchOffline','locateGame','rescanSetup','openSteam','openGameFolder'):
+            op=payload['action']
+            if self.stop.is_set():raise ValueError('The companion is closing.')
+            if op=='requestPlay':
+                self.launcher.request_play()
+            elif op=='launchOffline':
+                self.launcher.launch()
+                with self.lock:
+                    self.live_enabled=True;self.cfg['liveDetection']=True;self.live_status='Checking the launched session…';self.persist()
+            elif op=='locateGame':
+                import tkinter as tk
+                from tkinter import filedialog
+                root=tk.Tk();root.withdraw();root.attributes('-topmost',True)
+                try:path=filedialog.askopenfilename(title='Locate installed Elden Ring',filetypes=[('Elden Ring','eldenring.exe')])
+                finally:root.destroy()
+                if path:self.launcher.select(path)
+            elif op=='rescanSetup':
+                self.launcher.use_installation(detect_dlc());self.launcher.refresh()
+            elif op=='openSteam':
+                os.startfile('steam://open/main')
+            elif op=='openGameFolder':
+                folder=self.launcher.snapshot().get('gamePath')
+                if not folder or not Path(folder).is_dir():raise ValueError('Locate Elden Ring first.')
+                os.startfile(folder)
+            return
         with self.lock:
             trusted=self.integrity.begin_update()
             if not trusted and isinstance(payload,dict) and payload.get('action') in ('speedrun','runCategory','timingMode'):
@@ -626,7 +676,7 @@ def serve(tracker,port):
                     with tracker.lock:report=tracker.export_run()
                 except ValueError as error:return self.reply(400,json.dumps({'error':str(error)}))
                 return self.reply(200,report,REPORT_MIME)
-            if path=='/health':return self.reply(200,'{"app":"TarnishedLineup"}')
+            if path=='/health':return self.reply(200,'{"app":"TarnishedCompanion"}')
             if path.startswith('/portraits/'):
                 name=Path(path).name
                 if name not in {Path(v['src']).name for v in PORTRAITS.values()}:return self.reply(404,'{}')
@@ -667,21 +717,27 @@ def run_personal_overlay(port,owned=False):
         import ctypes
         ctypes.windll.user32.MessageBoxW(None,
             'Personal Overlay could not start. Make sure Microsoft Edge WebView2 Runtime is installed.\n\n'+str(error),
-            'Tarnished Lineup',0x10)
+            'Tarnished Companion',0x10)
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--no-browser',action='store_true');parser.add_argument('--port',type=int,default=18473);parser.add_argument('--data-dir');parser.add_argument('--personal-overlay',action='store_true')
     parser.add_argument('--worker',action='store_true',help=argparse.SUPPRESS)
     parser.add_argument('--recover',action='store_true',help=argparse.SUPPRESS)
     parser.add_argument('--owned-overlay',action='store_true',help=argparse.SUPPRESS)
+    parser.add_argument('--no-game-launch',action='store_true',help='Open the dashboard without automatically launching Elden Ring (development/testing).')
+    parser.add_argument('--prepare-offline-setup',action='store_true',help=argparse.SUPPRESS)
     args=parser.parse_args()
+    if args.prepare_offline_setup:
+        try:prepare_installed_game(PROFILE,detect_dlc());return 0
+        except (OSError,ValueError):return 2
     if args.personal_overlay:
         run_personal_overlay(args.port,owned=args.owned_overlay);return 0
-    d=args.data_dir or str(Path(os.environ.get('LOCALAPPDATA',str(Path.home()))) / 'TarnishedLineup')
+    d=args.data_dir or str(default_data_dir())
     from app_supervisor import run_supervised, existing_instance
     from app_lifecycle import begin_session, mark_clean_exit, supervisor_stop_requested, RECOVER_ENV
     if existing_instance(args.port):
-        if not args.no_browser:webbrowser.open(f'http://127.0.0.1:{args.port}/')
+        if not args.worker and not args.no_game_launch:request_existing_play(args.port)
+        if not args.no_browser:webbrowser.open(f'http://127.0.0.1:{args.port}/preview')
         if args.worker:mark_clean_exit('already-running')
         return 0
     if not args.worker:
@@ -693,6 +749,7 @@ def main():
     recover=args.recover or session['previousUnclean'] or os.environ.get(RECOVER_ENV)=='1'
     tracker=Tracker(d,recover_interrupted=recover)
     tracker.port=args.port
+    if not args.no_game_launch:tracker.launcher.request_play()
     try:server=serve(tracker,args.port)
     except OSError:
         if existing_instance(args.port):
@@ -702,8 +759,9 @@ def main():
     tracking_thread=threading.Thread(target=tracker.run,daemon=True);tracking_thread.start()
     external_thread=threading.Thread(target=tracker.external_worker,daemon=True);external_thread.start()
     published_thread=threading.Thread(target=tracker.published_worker,daemon=True);published_thread.start()
+    setup_thread=threading.Thread(target=tracker.setup_worker,daemon=True);setup_thread.start()
     server_thread=threading.Thread(target=server.serve_forever,daemon=True);server_thread.start()
-    if not args.no_browser:webbrowser.open(f'http://127.0.0.1:{args.port}/')
+    if not args.no_browser:webbrowser.open(f'http://127.0.0.1:{args.port}/preview')
     try:
         while not tracker.stop.wait(.5):
             if supervisor_stop_requested():
@@ -720,6 +778,7 @@ def main():
         server.shutdown();server.server_close()
         tracking_thread.join(timeout=10);external_thread.join(timeout=3);server_thread.join(timeout=2)
         published_thread.join(timeout=6)
+        setup_thread.join(timeout=2)
     if overlay_stopped and tracker.shutdown_reason!='unexpected' and not any(thread.is_alive() for thread in (tracking_thread,external_thread,server_thread)):
         mark_clean_exit(tracker.shutdown_reason);return 0
     return 1

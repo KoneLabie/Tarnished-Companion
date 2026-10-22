@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives import serialization
 from record_integrity import REPORT_BEGIN, REPORT_END, REPORT_DOMAIN
 from run_package import create_package, recipient_key_id
 
-MIME = 'application/vnd.tarnished-lineup.run+json'
+MIME = 'application/vnd.tarnished-companion.run+json'
 
 
 def load_recipient(path):

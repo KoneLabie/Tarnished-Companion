@@ -97,7 +97,7 @@ def fetch_json(url):
             transport = connection.sock
             transport.settimeout(max(.001, deadline-time.monotonic()))
             connection.request('GET', parsed.path + ('?' + parsed.query if parsed.query else ''),
-                               headers={'User-Agent': 'TarnishedLineup/1.0', 'Accept': 'application/json',
+                               headers={'User-Agent': 'TarnishedCompanion/1.0', 'Accept': 'application/json',
                                         'Accept-Encoding': 'identity'})
             transport.settimeout(max(.001, deadline-time.monotonic()))
             response = connection.getresponse()

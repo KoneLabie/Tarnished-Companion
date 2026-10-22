@@ -1,0 +1,49 @@
+name: Build Windows app and installer
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install build dependencies
+        run: python -m pip install -r source/requirements.txt pyinstaller==6.22.3
+      - name: Regression tests
+        run: python -m unittest discover -s source/tests -p "test_*.py" -q
+      - name: UI checks
+        run: |
+          node source/tests/test_overlay.cjs
+          node source/tests/test_dashboard.cjs
+          node source/tests/test_published_records_ui.cjs
+      - name: Build portable Windows executable
+        shell: pwsh
+        run: ./source/build.ps1
+      - name: Get official installer compiler
+        shell: pwsh
+        run: |
+          $download=Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
+          Invoke-WebRequest -Uri 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe' -OutFile $download
+          $signature=Get-AuthenticodeSignature -LiteralPath $download
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Pyrsys') { throw 'Compiler signature verification failed.' }
+          $installed=Start-Process -FilePath $download -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-' -Wait -PassThru -WindowStyle Hidden
+          if ($installed.ExitCode -ne 0) { throw 'Installer compiler installation failed.' }
+      - name: Build guided installer
+        shell: pwsh
+        run: ./source/installer/build-installer.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TarnishedCompanion-Windows
+          path: |
+            TarnishedCompanion.exe
+            TarnishedCompanion-Setup.exe
+          if-no-files-found: error
